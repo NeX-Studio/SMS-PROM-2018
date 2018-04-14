@@ -10,7 +10,8 @@ var info = [
         "uuid": "", 
         "tel": "",
         "avoidance": "",
-        // Partner Only Options
-        "isICStudent": "" // False indicate that the student must also pay for his/her partner
+        // Student and Partner Only Options
+        // Empty string for partner indicates that he/she is not in the international curriculum; thus whose fee must also pay by the student
+        "class": ""
     }
 ]
