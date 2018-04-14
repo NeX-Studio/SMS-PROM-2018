@@ -2,6 +2,7 @@ extends layout
 
 block content
 	canvas#c
+
 	#app
 		.header
 			p
@@ -132,7 +133,7 @@ block content
 						span.price ￥{{calculateFamilyFee()}}
 				.info.detail(v-for='(member, index) in signup.family')
 					h4
-						| 家属 #{{index+1}}
+						| 家属 \#{{index+1}}
 						span.dot
 						span.price ￥{{member.type == 'parent' ? 350 : 150}}
 					p
@@ -167,8 +168,8 @@ block content
 					a#submit.lgbtn(@click='submitInfo', href='javascript:void(0)') SUBMIT
 					br
 					a.smbtn(@click='toSignup', href='javascript:void(0)') BACK
-	script(src='js/TweenMax.min.js')
-	script(src='js/wave.js')
+	script(src='/js/TweenMax.min.js')
+	script(src='/js/wave.js')
 	script.
 		var app = new Vue({
 		el: '#app',
