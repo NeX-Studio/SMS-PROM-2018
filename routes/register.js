@@ -22,7 +22,7 @@ router.post('/', function(req, res, next) {
 				// Update Documents
 				cursor = await db.collection('participants').deleteMany("uuid": uuid);
 				cursor = await db.collection('participants').insertMany(request);
-				res.status().json({errcode: 0, errmsg: "", class: request.class, fee: fee})
+				res.status(200).json({errcode: 0, errmsg: "", class: request.class, fee: fee})
 			}
 			else {
 				cursor = await db.collection('participants').findOne({"group": group});
@@ -31,8 +31,8 @@ router.post('/', function(req, res, next) {
 					res.status(401).json({errorcode: 10005, errmsg: 'Invalid uuid'});
 				else{
 					// Insert documents
-					 = await db.collection('participants').insertMany(request);
-					res.status(201).json({errcode: 0, errmsg: ""});
+					cursor = await db.collection('participants').insertMany(request);
+					res.status(201).json({errcode: 0, errmsg: "", class: request.class, fee: fee});
 				}
 			}
 		} catch(err){
