@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" name="viewport" />
+    <title>SMS IC Prom 2018</title>
+    <link href="https://fonts.googleapis.com/css?family=Oswald:200,400,700" rel="stylesheet">
+    <link href="css/default.css" rel="stylesheet" />
+    <script src="js/vue.min.js"></script>
+</head>
+<body>
+    <canvas id="c"></canvas>
+
+    <div id="app">
+        <div class="header">
+            <p><span>SHENZHEN MIDDLE SCHOOL</span></p>
+            <p><span>INTERNATIONAL CURRICULUM</span></p>
+            <h1><span>PROM <span class="light">2018</span></span></h1>
+        </div>
+
+        <transition-group name="fade" mod="out-in">
+        <div key="signupbtn" style="text-align:center" v-show="stage == 'home'">
+            <a href="javascript:void(0)" @click="toSignup" class="lgbtn" id="signup">SIGN UP</a><br />
+        </div>
+
+        <div key="signup" class="signup" v-show="stage == 'signup'">
+            <div class="info">
+                <h4>深圳中学2018届国际体系 毕业舞会</h4>
+                <p>2018 年 6 月 10 日 18:30</p>
+                <p>深圳四季酒店 宴会厅</p>
+            </div>
+            <div class="inputs">
+                <div class="input">
+                    <span>学生姓名</span>
+                    <input v-model.trim="signup.name" type="text" />
+                </div>
+                <div class="input">
+                    <span>性别</span>
+                    <input type="radio" id="male" name="gender" value="male" v-model="signup.gender" />
+                    <label style="margin-right:8px" for="male">男</label>
+                    <input type="radio" id="female" name="gender" value="female" v-model="signup.gender" />
+                    <label for="female">女</label>
+                    <input type="radio" id="other" name="gender" value="other" v-model="signup.gender" />
+                    <label for="other">其他</label>
+                </div>
+                <div class="input">
+                    <span>班级</span><span>高三</span>
+                    <select v-model="signup.class">
+                        <option value="17">(17) 班</option>
+                        <option value="18">(18) 班</option>
+                        <option value="19">(19) 班</option>
+                        <option value="20">(20) 班</option>
+                        <option disabled="disabled" value="0" style="font-size:12px">15级交换/转校生请填原班级</option>
+                    </select>
+                </div>
+                <div class="input">
+                    <span>电话号码</span>
+                    <input v-model="signup.phone" type="text" />
+                </div>
+            </div>
+            <div class="inputs">
+                <div class="input">
+                    <span>家属数量</span>
+                    <input @click="deleteFamilyMember" type="button" value="-" class="highlight" style="margin-right:8px" />
+                    <input :value="signup.family.length" type="number" disabled="disabled" style="margin-right:8px;width:100px;text-align:center" />
+                    <input @click="addFamilyMember" type="button" value="+" class="highlight" />
+                </div>
+            </div>
+            <div class="inputs" v-for="(member, index) in signup.family">
+                <div class="input">
+                    <span>家属{{index+1}} 姓名</span>
+                    <input v-model.trim="member.name" type="text" />
+                </div>
+                <div class="input">
+                    <span>性别</span>
+                    <input type="radio" :id="'rm-'+index" value="male" v-model="member.gender" />
+                    <label :for="'rm-'+index">男</label>
+                    <input type="radio" :id="'rf-'+index" value="female" v-model="member.gender" />
+                    <label :for="'rf-'+index">女</label>
+                    <input type="radio" :id="'ro-'+index" value="other" v-model="member.gender" />
+                    <label :for="'ro-'+index">其他</label>
+                </div>
+                <div class="input">
+                    <span>身份</span>
+                    <input type="radio" :id="'rp-'+index" value="parent" v-model="member.type" />
+                    <label :for="'rp-'+index">家长</label>
+                    <input type="radio" :id="'rc-'+index" value="child" v-model="member.type" />
+                    <label :for="'rc-'+index">儿童</label>
+                </div>
+            </div>
+            <div class="inputs">
+                 <div class="input">
+                    <span>您有舞伴吗?</span>
+                    <input v-model="signup.hasPartner" type="radio" id="s-1" name="hasPartner" value="true" />
+                    <label style="margin-right:8px" for="s-1">有</label>
+                    <input v-model="signup.hasPartner" type="radio" id="s-2" name="hasPartner" value="false" />
+                    <label for="s-2">没有</label>
+                </div>
+                <div v-if="signup.hasPartner == 'true'" class="input">
+                    <span>您的舞伴是国体高三学生吗?</span>
+                    <input v-model="signup.partner.isICStudent" type="radio" id="t-1" name="isICStudent" value="true" />
+                    <label style="margin-right:8px" for="t-1">是</label>
+                    <input v-model="signup.partner.isICStudent" type="radio" id="t-2" name="isICStudent" value="false" />
+                    <label for="t-2">否</label>
+                </div>
+            </div>
+            <div v-if="signup.hasPartner == 'true' && signup.partner.isICStudent" class="inputs">
+                <div class="input">
+                    <span>舞伴姓名</span>
+                    <input v-model.trim="signup.partner.name" type="text" />
+                </div>
+                <div class="input">
+                    <span>性别</span>
+                    <input v-model="signup.partner.gender" type="radio" id="pmale" name="pgender" value="male" />
+                    <label for="pmale">男</label>
+                    <input v-model="signup.partner.gender" type="radio" id="pfemale" name="pgender" value="female" />
+                    <label for="pfemale">女</label>
+                    <input v-model="signup.partner.gender" type="radio" id="pother" name="pgender" value="other" />
+                    <label for="pother">其他</label>
+                </div>
+                <p>国体高三舞伴需单独填写此表单并按所在班级缴费</p>
+            </div>
+            <div class="inputs">
+                 <div class="input">
+                    <span>以上成员存在过敏或忌口吗?</span>
+                    <input v-model="signup.hasAvoidance" type="radio" id="a-1" name="hasAvoidance" value="true" />
+                    <label style="margin-right:8px" for="a-1">是</label>
+                    <input v-model="signup.hasAvoidance" type="radio" id="a-2" name="hasAvoidance" value="false" />
+                    <label for="a-2">否</label>
+                </div>
+                <div v-if="signup.hasAvoidance == 'true'" class="input">
+                    <span>请说明</span>
+                    <input v-model.trim="signup.avoidance" type="text" />
+                </div>
+            </div>
+            <div style="text-align:center"><a @click="checkInfo" href="javascript:void(0)" class="lgbtn" id="next">NEXT</a></div>
+        </div>
+        <div key="detail" v-if="stage == 'detail'">
+            <div class="info detail">
+                <h4><b>学生</b><span class="dot"></span><span class="price">￥400</span></h4>
+                <p><b>姓名：</b>{{signup.name}}</p>
+                <p><b>性别：</b>{{genders[signup.gender]}}</p>
+                <p><b>班级：</b>高三 ({{signup.class}}) 班</p>
+                <p><b>电话号码：</b>{{signup.phone}}</p>
+            </div>
+            <div class="info detail">
+                <h4><b>家属</b><span class="dot"></span><span class="price">￥{{calculateFamilyFee()}}</span></h4>
+            </div>
+            <div class="info detail" v-for="(member, index) in signup.family">
+                <h4>家属 #{{index+1}}<span class="dot"></span><span class="price">￥{{member.type == 'parent' ? 350 : 150}}</span></h4>
+                <p><b>姓名：</b>{{member.name}}</p>
+                <p><b>性别：</b>{{genders[member.gender]}}</p>
+                <p><b>身份：</b>{{roles[member.type]}}</p>
+            </div>
+            <div v-if="signup.hasPartner == 'true'" class="info detail">
+                <h4><b>舞伴</b><span class="dot"></span><span class="price">{{signup.partner.isICStudent == 'true' ? '需单独报名/缴费' : '￥400'}}</span></h4>
+                <p><b>姓名：</b>{{signup.partner.name}}</p>
+                <p><b>性别：</b>{{genders[signup.partner.gender]}}</p>
+            </div>
+            <div class="info detail">
+                <h4><b>共计</b><span class="dot"></span><span class="price">￥{{calculateTotalFee()}}</span></h4>
+                <p><b>过敏/忌口：</b>{{signup.hasAvoidance == 'false' ? '无' : signup.avoidance}}</p>
+            </div>
+            <div style="text-align:center">
+                <a @click="submitInfo" href="javascript:void(0)" class="lgbtn" id="submit">SUBMIT</a><br />
+                <a @click="toSignup" href="javascript:void(0)" class="smbtn">BACK</a>
+            </div>
+        </div>
+        </transition-group>
+    </div>
+
+    <script src="js/TweenMax.min.js"></script>
+    <script src="js/wave.js"></script>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                stage: "home",
+                signup: {
+                    name: "",
+                    gender: "",
+                    class: 17,
+                    phone: "",
+                    family: [],
+                    hasPartner: null,
+                    partner: {
+                        isICStudent: null,
+                        name: "",
+                        gender: ""
+                    },
+                    hasAvoidance: 'false',
+                    avoidance: "",
+                },
+                res: {
+                    name: { range: [0, 10], cn: "姓名" },
+                    phone: { regex: /^\d{11}$/, cn: "电话号码" },
+                    type: { regex: /^child$|^parent$/, cn: "身份" },
+                    gender: { regex: /^male$|^female$|^other$/, cn: "性别" },
+                    class: { regex: /^17$|^18$|^19$|^20$/, cn: "班级" },
+                    hasPartner: { regex: /^true|^false$/, cn: "舞伴信息" },
+                    isICStudent: { regex: /^true|^false$/, cn: "身份" },
+                    avoidance: { range: [-1, 200], cn: "过敏/忌口信息" }
+                },
+                genders: {
+                    male: "男",
+                    female: "女",
+                    other: "其他"
+                },
+                roles: {
+                    parent: "家长",
+                    child: "儿童"
+                }
+            },
+            methods: {
+                toSignup: function () {
+                    this.stage = 'signup'
+                },
+                addFamilyMember: function () {
+                    var f = this.signup.family
+                    if (f.length < 10) {
+                        f.push({name: "", gender: "", type: ""})
+                    }
+                },
+                deleteFamilyMember: function () {
+                    var f = this.signup.family
+                    if (f.length > 0) {
+                        f.pop()
+                    }
+                },
+                testInput: function (info, suffix = "") {
+                    var keys = Object.keys(info)
+                    var res = this.res
+                    for (i in keys) {
+                        var k = keys[i]
+                        var val = info[k]
+                        if (k == "family") {
+                            for (m in info[k])
+                                if (!this.testInput(info[k][m], "家属")) return false
+                        }
+                        else if (k == "partner" && info.hasPartner == 'true') {
+                            if (!this.testInput(info[k], "舞伴")) return false
+                        }
+                        else if (k in res) {
+                            if ('range' in res[k]) {
+                                if (val.length <= res[k].range[0]) {
+                                    alert(suffix + res[k].cn + "过短")
+                                    return false
+                                }
+                                if (val.length >= res[k].range[1]) {
+                                    alert(suffix + res[k].cn + "过长")
+                                    return false
+                                }
+                            }
+                            else if ('regex' in res[k]) {
+                                if (!res[k].regex.test(val)) {
+                                    alert('请正确填写' + suffix + res[k].cn)
+                                    return false
+                                }
+                            }
+                        }
+                    }
+                    return true
+                },
+                checkInfo: function () {
+                    if (this.testInput(this.signup)) {
+                        this.stage = 'detail'
+                    }
+                },
+                calculateFamilyFee: function () {
+                    var f = 0
+                    for (m in this.signup.family) {
+                        f += this.signup.family[m].type == 'parent' ? 350 : 150
+                    }
+                    return f
+                },
+                calculateTotalFee: function () {
+                    return 400 + this.calculateFamilyFee() + ((this.signup.hasPartner == 'true' && this.signup.partner.isICStudent == 'false') ? 400 : 0)
+                },
+                submitInfo: function () {
+                    var info = Object.assign({}, this.signup)
+                    if (info.hasPartner == 'false') {
+                        info.partner = null
+                    }
+                    console.log(JSON.stringify(info))
+                }
+            }
+        })
+    </script>
+</body>
+</html>
