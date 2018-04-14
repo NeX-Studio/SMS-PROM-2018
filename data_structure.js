@@ -1,28 +1,16 @@
-var info = {
-    "name": "学生名",
-    "gender": "male",
-    "class": "18",
-    "phone": "12345678901",
-    "family": [ //数组长度为0-10
-        {
-        "name": "家属1",
-        "gender": "female",
-        "type": "parent"
-        },
-        {
-        "name": "家属2",
-        "gender": "other",
-        "type": "child"
-        }
-    ],
-    "hasPartner": "true",
-    "partner": { //如果没有则partner为null
-        "isICStudent": "true",
-        "name": "舞伴名",
-        "gender": "female"
-    },
-    "hasAvoidance": "false",
-    "avoidance": ""
-}
-// 报名是post以上数据架构到api，应返回一个6位随机大写字母+数字的代码凭证
-// 凭此凭证可以从api取回（get）同样结构的数据并修改（update）
+// POST https://prom.thexyzlab.tech/register
+var info = [
+    {
+        "name": "",
+        "gender": "",
+        "type": "", // Student, Parent, Child, and Partner
+        "group": "", // Enter student name, for grouping student, parents, and children from same family
+        // Randomly Generated, will be sent to the student phone number for updating info
+        // If the group existed with different uuid, this post will be considered unauthorized 
+        "uuid": "", 
+        "tel": "",
+        "avoidance": "",
+        // Partner Only Options
+        "isICStudent": "" // False indicate that the student must also pay for his/her partner
+    }
+]

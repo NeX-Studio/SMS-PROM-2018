@@ -1,0 +1,286 @@
+extends layout
+
+block content
+	canvas#c
+	#app
+		.header
+			p
+				span SHENZHEN MIDDLE SCHOOL
+			p
+				span INTERNATIONAL CURRICULUM
+			h1
+				span
+					| PROM 
+					span.light 2018
+		transition-group(name='fade', mod='out-in')
+			div(key='signupbtn', style='text-align:center', v-show="stage == 'home'")
+				a#signup.lgbtn(href='javascript:void(0)', @click='toSignup') SIGN UP
+				br
+			.signup(key='signup', v-show="stage == 'signup'")
+				.info
+					h4 深圳中学2018届国际体系 毕业舞会
+					p 2018 年 6 月 10 日 18:30
+					p 深圳四季酒店 宴会厅
+				.inputs
+					.input
+						span 学生姓名
+						input(v-model.trim='signup.name', type='text')
+					.input
+						span 性别
+						input#male(type='radio', name='gender', value='male', v-model='signup.gender')
+						label(style='margin-right:8px', for='male') 男
+						input#female(type='radio', name='gender', value='female', v-model='signup.gender')
+						label(for='female') 女
+						input#other(type='radio', name='gender', value='other', v-model='signup.gender')
+						label(for='other') 其他
+					.input
+						span 班级
+						span 高三
+						select(v-model='signup.class')
+							option(value='17') (17) 班
+							option(value='18') (18) 班
+							option(value='19') (19) 班
+							option(value='20') (20) 班
+							option(disabled='disabled', value='0', style='font-size:12px') 15级交换/转校生请填原班级
+					.input
+						span 电话号码
+						input(v-model='signup.phone', type='text')
+				.inputs
+					.input
+						span 家属数量
+						input.highlight(@click='deleteFamilyMember', type='button', value='-', style='margin-right:8px')
+						input(:value='signup.family.length', type='number', disabled='disabled', style='margin-right:8px;width:100px;text-align:center')
+						input.highlight(@click='addFamilyMember', type='button', value='+')
+				.inputs(v-for='(member, index) in signup.family')
+					.input
+						span 家属{{index+1}} 姓名
+						input(v-model.trim='member.name', type='text')
+					.input
+						span 性别
+						input(type='radio', :id="'rm-'+index", value='male', v-model='member.gender')
+						label(:for="'rm-'+index") 男
+						input(type='radio', :id="'rf-'+index", value='female', v-model='member.gender')
+						label(:for="'rf-'+index") 女
+						input(type='radio', :id="'ro-'+index", value='other', v-model='member.gender')
+						label(:for="'ro-'+index") 其他
+					.input
+						span 身份
+						input(type='radio', :id="'rp-'+index", value='parent', v-model='member.type')
+						label(:for="'rp-'+index") 家长
+						input(type='radio', :id="'rc-'+index", value='child', v-model='member.type')
+						label(:for="'rc-'+index") 儿童
+				.inputs
+					.input
+						span 您有舞伴吗?
+						input#s-1(v-model='signup.hasPartner', type='radio', name='hasPartner', value='true')
+						label(style='margin-right:8px', for='s-1') 有
+						input#s-2(v-model='signup.hasPartner', type='radio', name='hasPartner', value='false')
+						label(for='s-2') 没有
+					.input(v-if="signup.hasPartner == 'true'")
+						span 您的舞伴是国体高三学生吗?
+						input#t-1(v-model='signup.partner.isICStudent', type='radio', name='isICStudent', value='true')
+						label(style='margin-right:8px', for='t-1') 是
+						input#t-2(v-model='signup.partner.isICStudent', type='radio', name='isICStudent', value='false')
+						label(for='t-2') 否
+				.inputs(v-if="signup.hasPartner == 'true' && signup.partner.isICStudent")
+					.input
+						span 舞伴姓名
+						input(v-model.trim='signup.partner.name', type='text')
+					.input
+						span 性别
+						input#pmale(v-model='signup.partner.gender', type='radio', name='pgender', value='male')
+						label(for='pmale') 男
+						input#pfemale(v-model='signup.partner.gender', type='radio', name='pgender', value='female')
+						label(for='pfemale') 女
+						input#pother(v-model='signup.partner.gender', type='radio', name='pgender', value='other')
+						label(for='pother') 其他
+					p 国体高三舞伴需单独填写此表单并按所在班级缴费
+				.inputs
+					.input
+						span 以上成员存在过敏或忌口吗?
+						input#a-1(v-model='signup.hasAvoidance', type='radio', name='hasAvoidance', value='true')
+						label(style='margin-right:8px', for='a-1') 是
+						input#a-2(v-model='signup.hasAvoidance', type='radio', name='hasAvoidance', value='false')
+						label(for='a-2') 否
+					.input(v-if="signup.hasAvoidance == 'true'")
+						span 请说明
+						input(v-model.trim='signup.avoidance', type='text')
+				div(style='text-align:center')
+					a#next.lgbtn(@click='checkInfo', href='javascript:void(0)') NEXT
+			div(key='detail', v-if="stage == 'detail'")
+				.info.detail
+					h4
+						b 学生
+						span.dot
+						span.price ￥400
+					p
+						b 姓名：
+						| {{signup.name}}
+					p
+						b 性别：
+						| {{genders[signup.gender]}}
+					p
+						b 班级：
+						| 高三 ({{signup.class}}) 班
+					p
+						b 电话号码：
+						| {{signup.phone}}
+				.info.detail
+					h4
+						b 家属
+						span.dot
+						span.price ￥{{calculateFamilyFee()}}
+				.info.detail(v-for='(member, index) in signup.family')
+					h4
+						| 家属 #{{index+1}}
+						span.dot
+						span.price ￥{{member.type == 'parent' ? 350 : 150}}
+					p
+						b 姓名：
+						| {{member.name}}
+					p
+						b 性别：
+						| {{genders[member.gender]}}
+					p
+						b 身份：
+						| {{roles[member.type]}}
+				.info.detail(v-if="signup.hasPartner == 'true'")
+					h4
+						b 舞伴
+						span.dot
+						span.price {{signup.partner.isICStudent == 'true' ? '需单独报名/缴费' : '￥400'}}
+					p
+						b 姓名：
+						| {{signup.partner.name}}
+					p
+						b 性别：
+						| {{genders[signup.partner.gender]}}
+				.info.detail
+					h4
+						b 共计
+						span.dot
+						span.price ￥{{calculateTotalFee()}}
+					p
+						b 过敏/忌口：
+						| {{signup.hasAvoidance == 'false' ? '无' : signup.avoidance}}
+				div(style='text-align:center')
+					a#submit.lgbtn(@click='submitInfo', href='javascript:void(0)') SUBMIT
+					br
+					a.smbtn(@click='toSignup', href='javascript:void(0)') BACK
+	script(src='js/TweenMax.min.js')
+	script(src='js/wave.js')
+	script.
+		var app = new Vue({
+		el: '#app',
+		data: {
+		stage: "home",
+		signup: {
+		name: "",
+		gender: "",
+		class: 17,
+		phone: "",
+		family: [],
+		hasPartner: null,
+		partner: {
+		isICStudent: null,
+		name: "",
+		gender: ""
+		},
+		hasAvoidance: 'false',
+		avoidance: "",
+		},
+		res: {
+		name: { range: [0, 10], cn: "姓名" },
+		phone: { regex: /^\\d{11}$/, cn: "电话号码" },
+		type: { regex: /^child$|^parent$/, cn: "身份" },
+		gender: { regex: /^male$|^female$|^other$/, cn: "性别" },
+		class: { regex: /^17$|^18$|^19$|^20$/, cn: "班级" },
+		hasPartner: { regex: /^true|^false$/, cn: "舞伴信息" },
+		isICStudent: { regex: /^true|^false$/, cn: "身份" },
+		avoidance: { range: [-1, 200], cn: "过敏/忌口信息" }
+		},
+		genders: {
+		male: "男",
+		female: "女",
+		other: "其他"
+		},
+		roles: {
+		parent: "家长",
+		child: "儿童"
+		}
+		},
+		methods: {
+		toSignup: function () {
+		this.stage = 'signup'
+		},
+		addFamilyMember: function () {
+		var f = this.signup.family
+		if (f.length < 10) {
+		f.push({name: "", gender: "", type: ""})
+		}
+		},
+		deleteFamilyMember: function () {
+		var f = this.signup.family
+		if (f.length > 0) {
+		f.pop()
+		}
+		},
+		testInput: function (info, suffix = "") {
+		var keys = Object.keys(info)
+		var res = this.res
+		for (i in keys) {
+		var k = keys[i]
+		var val = info[k]
+		if (k == "family") {
+		for (m in info[k])
+		if (!this.testInput(info[k][m], "家属")) return false
+		}
+		else if (k == "partner" && info.hasPartner == 'true') {
+		if (!this.testInput(info[k], "舞伴")) return false
+		}
+		else if (k in res) {
+		if ('range' in res[k]) {
+		if (val.length <= res[k].range[0]) {
+		alert(suffix + res[k].cn + "过短")
+		return false
+		}
+		if (val.length >= res[k].range[1]) {
+		alert(suffix + res[k].cn + "过长")
+		return false
+		}
+		}
+		else if ('regex' in res[k]) {
+		if (!res[k].regex.test(val)) {
+		alert('请正确填写' + suffix + res[k].cn)
+		return false
+		}
+		}
+		}
+		}
+		return true
+		},
+		checkInfo: function () {
+		if (this.testInput(this.signup)) {
+		this.stage = 'detail'
+		}
+		},
+		calculateFamilyFee: function () {
+		var f = 0
+		for (m in this.signup.family) {
+		f += this.signup.family[m].type == 'parent' ? 350 : 150
+		}
+		return f
+		},
+		calculateTotalFee: function () {
+		return 400 + this.calculateFamilyFee() + ((this.signup.hasPartner == 'true' && this.signup.partner.isICStudent == 'false') ? 400 : 0)
+		},
+		submitInfo: function () {
+		var info = Object.assign({}, this.signup)
+		if (info.hasPartner == 'false') {
+		info.partner = null
+		}
+		console.log(JSON.stringify(info))
+		}
+		}
+		})
+
