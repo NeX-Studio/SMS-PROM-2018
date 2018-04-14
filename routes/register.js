@@ -20,7 +20,7 @@ router.post('/', function(req, res, next) {
 			let cursor = await db.collection('participants').findOne({"uuid": uuid});
 			if (cursor){
 				// Update Documents
-				cursor = await db.collection('participants').deleteMany("uuid": uuid);
+				cursor = await db.collection('participants').deleteMany({"uuid": uuid});
 				cursor = await db.collection('participants').insertMany(request);
 				res.status(200).json({errcode: 0, errmsg: "", class: request.class, fee: fee})
 			}
