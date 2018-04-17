@@ -11,10 +11,10 @@ router.post('/', function(req, res, next) {
 		let client;
 		try{
 			// Sterilize Input Data
-			request = request.participants.map(sterilizeData, request.meta);
 			let fee = getFee(request.participants);
 			let uuid = request.meta.uuid
-			let group = request.meta.group
+            let group = request.meta.group
+            request = request.participants.map(sterilizeData, request.meta);
 			client = await MongoClient.connect(MONGO_URL);
 			const db = client.db(DB_NAME);
 			let cursor = await db.collection('participants').findOne({"uuid": uuid});
