@@ -11,7 +11,7 @@ router.post('/', function(req, res, next) {
 		let client;
 		try{
 			// Sterilize Input Data
-			request = request.participants.map(sterilizeData, request.meta);
+			request.participants = request.participants.map(sterilizeData, request.meta);
 			let fee = getFee(request.participants);
 			let uuid = request.meta.uuid
 			let group = request.meta.group
