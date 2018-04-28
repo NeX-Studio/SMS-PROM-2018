@@ -13,25 +13,26 @@ router.post('/', function(req, res, next) {
 			// Sterilize Input Data
 			request.participants = request.participants.map(sterilizeData, request.meta);
 			let fee = getFee(request.participants);
-			let uuid = request.meta.uuid
-			let group = request.meta.group
+			let uuid = request.meta.uuid;
+			let group = request.meta.group;
 			client = await MongoClient.connect(MONGO_URL);
 			const db = client.db(DB_NAME);
 			let cursor = await db.collection('participants').findOne({"uuid": uuid});
 			if (cursor){
 				// Update Documents
 				cursor = await db.collection('participants').deleteMany({"uuid": uuid});
-				cursor = await db.collection('participants').insertMany(request);
+				cursor = await db.collection('participants').insertMany(request.participants);
 				res.status(200).json({errcode: 0, errmsg: "", class: request.class, fee: fee})
 			}
 			else {
 				cursor = await db.collection('participants').findOne({"group": group});
 				// If attempts to add to same group without authorization happen
-				if (cursor.uuid != uuid)
+				if (cursor){
 					res.status(401).json({errorcode: 10005, errmsg: 'Invalid uuid'});
+				}
 				else{
 					// Insert documents
-					cursor = await db.collection('participants').insertMany(request);
+					cursor = await db.collection('participants').insertMany(request.participants);
 					res.status(201).json({errcode: 0, errmsg: "", class: request.class, fee: fee});
 				}
 			}
@@ -39,8 +40,9 @@ router.post('/', function(req, res, next) {
 			console.log(err.stack);
 			next(err);
 		}
-	});
+	})();
 });
+
 
 function sterilizeData(val){
 	// Use 'this' to get meta info
@@ -55,6 +57,7 @@ function sterilizeData(val){
 		"class": typeof val.class == "string" ? val.class : ""
 	}
 }
+
 
 function getFee(arr){
 	let fee = 0;

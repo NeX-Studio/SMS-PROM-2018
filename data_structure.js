@@ -6,7 +6,7 @@ var info = {
         "uuid": "", 
         "group": "", // Student name, for grouping student, parents, and children from same family
         "avoidance": ""
-    }
+    },
     "participants": [
         {
             "name": "",
