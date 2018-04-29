@@ -135,7 +135,7 @@
             </div>
             <div style="text-align:center"><a @click="checkInfo" href="javascript:void(0)" class="lgbtn" id="next">NEXT</a></div>
         </div>
-        <div key="detail" v-if="stage == 'detail'">
+        <div key="detail" v-if="stage == 'detail' || stage == 'submitted'">
             <div class="info detail">
                 <h4><b>学生</b><span class="dot"></span><span class="price">￥400</span></h4>
                 <p><b>姓名：</b>{{signup.name}}</p>
@@ -161,10 +161,26 @@
                 <h4><b>共计</b><span class="dot"></span><span class="price">￥{{calculateTotalFee()}}</span></h4>
                 <p><b>过敏/忌口：</b>{{signup.hasAvoidance == 'false' ? '无' : signup.avoidance}}</p>
             </div>
-            <div style="text-align:center">
-                <a @click="submitInfo" href="javascript:void(0)" class="lgbtn" id="submit">SUBMIT</a><br />
-                <a @click="toSignup" href="javascript:void(0)" class="smbtn">BACK</a>
-            </div>
+            <transition-group name="fade" mod="out-in">
+                <div key="submit-1" style="text-align:center" v-if="stage == 'detail'">
+                    <a @click="submitInfo" href="javascript:void(0)" class="lgbtn" id="submit">SUBMIT</a><br />
+                    <a @click="toSignup" href="javascript:void(0)" class="smbtn">BACK</a>
+                </div>
+                <div key="submit-2" class="info" v-if="stage == 'submitted'">
+                    <br />
+                    <h4>报名成功！</h4>
+                    <p>您的报名代码为 {{signup.uuid}} ，</p>
+                    <p>可用于查询或修改报名信息。</p>
+                    <br />
+                    <h4>您还需按下列步骤缴费</h4>
+                    <p>通过银行汇款 ￥{{calculateTotalFee()}} 至：</p>
+                    <p>XXXXXXXXXXXXXXXX 开户人</p>
+                    <p>XX银行 XX支行</p>
+                    <p>并备注：还没定</p>
+                    <a @click="toSignup" href="javascript:void(0)" class="lgbtn">EDIT</a><br />
+                    <a href="/" class="smbtn">LOGOUT</a>
+                </div>
+            </transition-group>
         </div>
         </transition-group>
     </div>

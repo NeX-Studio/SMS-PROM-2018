@@ -10,9 +10,10 @@ var app = new Vue({
     data: {
         stage: "home",
         signup: {
+            uuid: "",
             name: "",
             gender: "",
-            class: 17,
+            class: "17",
             phone: "",
             family: [],
             hasPartner: null,
@@ -99,6 +100,15 @@ var app = new Vue({
                 this.stage = 'detail'
             }
         },
+        getRandomUUID: function () {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            for (var i = 0; i < 6; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        },
         calculateFamilyFee: function () {
             var f = 0
             for (m in this.signup.family) {
@@ -112,20 +122,36 @@ var app = new Vue({
         updateDataStructure: function (info) {
             var result = []
             var s = this.signup
+            s.uuid = s.uuid ? s.uuid : this.getRandomUUID()
             result.push(new member(s.name, s.gender, 'student', s.phone, s.class))
             if (s.hasPartner == 'true')
-                result.push(new member(s.partner.name, s.partner.gender, 'partner', '', s.partner.isICStudent == 'true' ? 0 : ''))
+                result.push(new member(s.partner.name, s.partner.gender, 'partner', '', s.partner.isICStudent == 'true' ? '0' : ''))
             for (mid in s.family) {
                 var m = s.family[mid]
                 result.push(new member(m.name, m.gender, m.type, '', ''))
             }
             return {
-                meta: { uuid: '', group: s.name, avoidance: s.avoidance },
+                meta: { uuid: s.uuid, group: s.name, avoidance: s.avoidance },
                 participants: result
             }
         },
         submitInfo: function () {
-            console.log(JSON.stringify(this.updateDataStructure(this.signup)))
+            var payload = JSON.stringify(this.updateDataStructure(this.signup))
+            console.log(payload)
+            $.ajax({
+                url: "/register",
+                type: "POST",
+                data: payload,
+                contentType: "application/json",
+                success: function (data) {
+                    if (data.errorcode == 0) {
+                        this.stage = 'submitted'
+                    }
+                    else {
+                        alert(data.errmsg);
+                    }
+                }
+            })
         }
     }
 })
