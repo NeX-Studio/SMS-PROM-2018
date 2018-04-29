@@ -8,11 +8,7 @@ var Participants = {
         // Participants, Hosts, or Shows; Auto Generated
         "type": "",
 
-        // Prom Participants Only Options
-        "avoidance": "",
-
         // PromShowPerformers Only
-        "showname": "",
         "showtime": 0,
         "showtype": "",
         "note": ""
@@ -28,6 +24,7 @@ var Participants = {
             // Empty string for partner indicates that he/she is not in the international curriculum; thus whose fee must also pay by the student
             "class": "",
             "type": "", // Student, Parent, Child, and Partner
+            "avoidance": "",
 
             // Hosts Only Options
             "class": "",

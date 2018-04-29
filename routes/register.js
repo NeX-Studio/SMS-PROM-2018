@@ -55,11 +55,11 @@ function sterilizeData(val){
 	// Traverse attributes in input
 	switch(this.type){
 		case "participants":
-			return new PromParticipants(val.name, val.gender, this.group, this.uuid, val.tel, val.type, this.avoidance, val.class);
+			return new PromParticipants(val.name, val.gender, this.group, this.uuid, val.tel, val.type, val.avoidance, val.class);
 		case "hosts": 
 			return new PromHosts(val.name, val.gender, this.group, this.uuid, val.tel, val.class);
 		case "shows":
-			return new PromShowPerformers(val.name, val.gender, this.group, this.uuid, val.tel, this.showname, this.showtype, this.showtime, val.master, val.email, this.note);
+			return new PromShowPerformers(val.name, val.gender, this.group, this.uuid, val.tel, this.showtype, this.showtime, val.master, val.email, this.note);
 	}
 }
 
@@ -122,9 +122,8 @@ function PromHosts(name, gender, group, uuid, tel, class_){
 	this.class = class_;
 }
 
-function PromShowPerformers(name, gender, group, uuid, tel, showname, showtype, showtime, master, email, note){
+function PromShowPerformers(name, gender, group, uuid, tel, showtype, showtime, master, email, note){
     PromPeople.call(this, name, gender, group, uuid, tel);
-    this.showname = typeof showname == "string" ? showname : "";
 	this.showtype = typeof showtype == "string" ? showtype : "";
 	this.showtime = typeof showtime == "number" ? showtime : 0;
 	this.master = typeof master == "boolean" ? master : false;
