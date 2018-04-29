@@ -108,7 +108,7 @@ block content
 						input(v-model.trim='signup.avoidance', type='text')
 				div(style='text-align:center')
 					a#next.lgbtn(@click='checkInfo', href='javascript:void(0)') NEXT
-			div(key='detail', v-if="stage == 'detail'")
+			div(key='detail', v-if="stage == 'detail' || stage == 'submitted'")
 				.info.detail
 					h4
 						b 学生
@@ -164,10 +164,26 @@ block content
 					p
 						b 过敏/忌口：
 						| {{signup.hasAvoidance == 'false' ? '无' : signup.avoidance}}
-				div(style='text-align:center')
-					a#submit.lgbtn(@click='submitInfo', href='javascript:void(0)') SUBMIT
-					br
-					a.smbtn(@click='toSignup', href='javascript:void(0)') BACK
+				transition-group(name='fade', mod='out-in')
+					div(key='submit-1', style='text-align:center', v-if="stage == 'detail'")
+						a#submit.lgbtn(@click='submitInfo', href='javascript:void(0)') SUBMIT
+						br
+						a.smbtn(@click='toSignup', href='javascript:void(0)') BACK
+					.info(key='submit-2', v-if="stage == 'submitted'")
+						br
+						h4 报名成功！
+						p 您的报名代码为 {{signup.uuid}} ，
+						p 可用于查询或修改报名信息。
+						br
+						h4 您还需按下列步骤缴费
+						p 通过银行汇款 ￥{{calculateTotalFee()}} 至：
+						p XXXXXXXXXXXXXXXX 开户人
+						p XX银行 XX支行
+						p 并备注：还没定
+						a.lgbtn(@click="toSignup", href='javascript:void(0)') EDIT
+						br
+						a.smbtn(href='/') LOGOUT
+
 	script(src='/js/TweenMax.min.js')
 	script(src='/js/wave.js')
 	script(src='/js/zepto.min.js')
