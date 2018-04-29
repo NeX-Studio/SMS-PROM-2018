@@ -1,5 +1,12 @@
 # SMS PROM 2018 Website
-## Features
+
+## Note
+* Submission Entry Points
+	* `/register/participants`
+	* `/register/shows`
+	* `/register/hosts`
+
+## ~~Features~~
 * Index page
 	* Show description
 	* Entry for signup
