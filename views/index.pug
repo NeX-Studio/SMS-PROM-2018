@@ -15,9 +15,119 @@ block content
 					span.light 2018
 		transition-group(name='fade', mod='out-in')
 			div(key='signupbtn', style='text-align:center', v-show="stage == 'home'")
-				a#signup.lgbtn(href='javascript:void(0)', @click='toSignup') SIGN UP
+				a#signup.lgbtn(href='javascript:void(0)', @click='toMenu') SIGN UP
 				br
-			.signup(key='signup', v-show="stage == 'signup'")
+			.menu(key='menu', v-show="stage == 'menu'")
+				.info
+					h4 请选择一项
+				.inputs
+					.input
+						input#t-prom(type='radio', name='type', value='prom', v-model='type')
+						label(for='t-prom') 舞会报名
+						input#t-hosts(type='radio', name='type', value='hosts', v-model='type')
+						label(for='t-hosts') 主持人报名
+						input#t-show(type='radio', name='type', value='shows', v-model='type')
+						label(for='t-show') 节目报名
+				.info
+					a.lgbtn(@click="chooseSignup", href='javascript:void(0)') NEXT
+			.shows(key='hosts', v-if="stage == 'shows' || stage == 'showsubmitted'")
+				.info
+					h4 舞台节目报名
+				transition-group(name='fade', mod='out-in')
+					div(key="shows-1", v-if="stage == 'shows'")
+						.inputs
+							.input
+								span 节目名称
+								input(v-model.trim='shows.showname', type='text')
+							.input
+								span 节目类型
+								input(v-model.trim='shows.showtype', type='text')
+							.input
+								span 节目时长
+								input(style='margin-right:8px;width: 100px;', v-model.trim='shows.showtime', type='number')
+								span(style='border-right:none') 分钟
+						.inputs
+							.input
+								span 负责人姓名
+								input(v-model.trim='shows.name', type='text')
+							.input
+								span 性别
+								input#s-male(type='radio', name='gender', value='male', v-model='shows.gender')
+								label(for='s-male') 男
+								input#s-female(type='radio', name='gender', value='female', v-model='shows.gender')
+								label(for='s-female') 女
+								input#s-other(type='radio', name='gender', value='other', v-model='shows.gender')
+								label(for='s-other') 其他
+							.input
+								span 电话号码
+								input(v-model='shows.tel', type='text')
+							.input
+								span 邮箱
+								input(v-model='shows.email', type='email')
+						.inputs
+							.input
+								span 其他表演者数量
+								input.highlight(@click='deletePerformer', type='button', value='-', style='margin-right:8px')
+								input(:value='shows.performers.length', type='number', disabled='disabled', style='margin-right:8px;width:100px;text-align:center')
+								input.highlight(@click='addPerformer', type='button', value='+')
+						.inputs(v-for='(member, index) in shows.performers')
+							.input
+								span 表演者{{index+1}} 姓名
+								input(v-model.trim='member.name', type='text')
+							.input
+								span 性别
+								input(type='radio', :id="'rm-'+index", value='male', v-model='member.gender')
+								label(:for="'rm-'+index") 男
+								input(type='radio', :id="'rf-'+index", value='female', v-model='member.gender')
+								label(:for="'rf-'+index") 女
+								input(type='radio', :id="'ro-'+index", value='other', v-model='member.gender')
+								label(:for="'ro-'+index") 其他
+						.inputs
+							.input
+								span 备注
+								input(v-model.trim='shows.note', type='text')
+						div(style='text-align:center')
+							a#next.lgbtn(@click='submitShowInfo', href='javascript:void(0)') NEXT
+							br
+							a.smbtn(@click='toMenu', href='javascript:void(0)') BACK
+					.info(key="shows-2", v-if="stage == 'showsubmitted'")
+						p 报名成功！
+			.hosts(key='hosts', v-if="stage == 'hosts' || stage == 'hostsubmitted'")
+				.info
+					h4 主持人报名
+				transition-group(name='fade', mod='out-in')
+					div(key="hosts-1", v-if="stage == 'hosts'")
+						.inputs
+							.input
+								span 姓名
+								input(v-model.trim='hosts.name', type='text')
+							.input
+								span 性别
+								input#h-male(type='radio', name='gender', value='male', v-model='hosts.gender')
+								label(for='h-male') 男
+								input#h-female(type='radio', name='gender', value='female', v-model='hosts.gender')
+								label(for='h-female') 女
+								input#h-other(type='radio', name='gender', value='other', v-model='hosts.gender')
+								label(for='h-other') 其他
+							.input
+								span 班级
+								span 高三
+								select(v-model='hosts.class')
+									option(value='17') (17) 班
+									option(value='18') (18) 班
+									option(value='19') (19) 班
+									option(value='20') (20) 班
+									option(disabled='disabled', value='0', style='font-size:12px') 15级交换/转校生请填原班级
+							.input
+								span 电话号码
+								input(v-model='hosts.tel', type='text')
+						div(style='text-align:center')
+							a#next.lgbtn(@click='submitHostInfo', href='javascript:void(0)') NEXT
+							br
+							a.smbtn(@click='toMenu', href='javascript:void(0)') BACK
+					.info(key="hosts-2", v-if="stage == 'hostsubmitted'")
+						p 报名成功！
+			.signup(key='signup', v-if="stage == 'signup'")
 				.info
 					h4 深圳中学2018届国际体系 毕业舞会
 					p 2018 年 6 月 10 日 18:30
@@ -108,6 +218,8 @@ block content
 						input(v-model.trim='signup.avoidance', type='text')
 				div(style='text-align:center')
 					a#next.lgbtn(@click='checkInfo', href='javascript:void(0)') NEXT
+					br
+					a.smbtn(@click='toMenu', href='javascript:void(0)', v-if="signup.uuid == ''") BACK
 			div(key='detail', v-if="stage == 'detail' || stage == 'submitted'")
 				.info.detail
 					h4
