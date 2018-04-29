@@ -5,47 +5,66 @@ const MONGO_URL = process.env.MONGO_URL;
 const DB_NAME = process.env.DB_NAME;
 
 /* GET users listing. */
-router.post('/', function(req, res, next) {
+router.post('/:type', function(req, res, next) {
 	let request = req.body;
-	(async function(){
-		let client;
-		try{
-			// Sterilize Input Data
-			request.participants = request.participants.map(sterilizeData, request.meta);
-			let fee = getFee(request.participants);
-			let uuid = request.meta.uuid;
-			let group = request.meta.group;
-			client = await MongoClient.connect(MONGO_URL);
-			const db = client.db(DB_NAME);
-			let cursor = await db.collection('participants').findOne({"uuid": uuid});
-			if (cursor){
-				// Update Documents
-				cursor = await db.collection('participants').deleteMany({"uuid": uuid});
-				cursor = await db.collection('participants').insertMany(request.participants);
-				res.status(200).json({errcode: 0, errmsg: "", class: request.class, fee: fee})
-			}
-			else {
-				cursor = await db.collection('participants').findOne({"group": group});
-				// If attempts to add to same group without authorization happen
+	let type = req.params.type;
+	if (type != "participants" && type != "hosts" && type != "shows")
+		next();
+	else{
+		(async function(){
+			let client;
+			try{
+				// Sterilize Input Data
+				request.meta.type = type;
+				request.participants = request.participants.map(sterilizeData, request.meta);
+				let fee = getFee(request.participants);
+				let uuid = request.meta.uuid;
+				let group = request.meta.group;
+				client = await MongoClient.connect(MONGO_URL);
+				const db = client.db(DB_NAME);
+				let cursor = await db.collection(type).findOne({"uuid": uuid});
 				if (cursor){
-					res.status(401).json({errorcode: 10005, errmsg: 'Invalid uuid'});
+					// Update Documents
+					cursor = await db.collection(type).deleteMany({"uuid": uuid});
+					cursor = await db.collection(type).insertMany(request.participants);
+					res.status(200).json({errcode: 0, errmsg: "", fee: fee})
 				}
-				else{
-					// Insert documents
-					cursor = await db.collection('participants').insertMany(request.participants);
-					res.status(201).json({errcode: 0, errmsg: "", class: request.class, fee: fee});
+				else {
+					cursor = await db.collection(type).findOne({"group": group});
+					// If attempts to add to same group without authorization happen
+					if (cursor){
+						res.status(401).json({errorcode: 10005, errmsg: 'Invalid uuid'});
+					}
+					else{
+						// Insert documents
+						cursor = await db.collection(type).insertMany(request.participants);
+						// TODO Return Object
+						res.status(201).json({errcode: 0, errmsg: "", fee: fee});
+					}
 				}
+			} catch(err){
+				console.log(err.stack);
+				next(err);
 			}
-		} catch(err){
-			console.log(err.stack);
-			next(err);
-		}
-	})();
+		})();
+	}
 });
-
 
 function sterilizeData(val){
 	// Use 'this' to get meta info
+	// Traverse attributes in input
+	switch(this.type){
+		case "participants":
+			return new PromParticipants(val.name, val.gender, this.group, this.uuid, val.tel, val.type, val.avoidance, val.class);
+		case "hosts": 
+			return new PromHosts(val.name, val.gender, this.group, this.uuid, val.tel, val.class);
+		case "shows":
+			return new PromShowPerformers(val.name, val.gender, this.group, this.uuid, val.tel, this.showtype, this.showtime, val.master, val.email, this.note);
+	}
+}
+
+/*
+function sterilizeData(val){
 	return {
 		"name": typeof val.name == "string" ? val.name : "",
 		"gender": typeof val.gender == "string" ? val.gender : "",
@@ -57,7 +76,7 @@ function sterilizeData(val){
 		"class": typeof val.class == "string" ? val.class : ""
 	}
 }
-
+*/
 
 function getFee(arr){
 	let fee = 0;
@@ -81,6 +100,35 @@ function getFee(arr){
 		}
 	}
 	return fee
+}
+
+function PromPeople(name, gender, group, uuid, tel){
+	this.name = typeof name == "string" ? name : "";
+	this.gender = typeof gender == "string" ? gender : "";
+	this.group = typeof group == "string" ? group : "";
+	this.uuid = typeof uuid == "string" ? uuid : "";
+	this.tel = typeof tel == "string" ? tel : "";
+}
+
+function PromParticipants(name, gender, group, uuid, tel, type, avoidance, class_){
+	PromPeople.call(this, name, gender, group, uuid, tel);
+	this.type = typeof type == "string" ? type : "";
+	this.avoidance = typeof avoidance == "string" ? avoidance : "";
+	this.class = typeof class_ == "string" ? class_ : "";
+}
+
+function PromHosts(name, gender, group, uuid, tel, class_){
+	PromPeople.call(this, name, gender, group, uuid, tel);
+	this.class = class_;
+}
+
+function PromShowPerformers(name, gender, group, uuid, tel, showtype, showtime, master, email, note){
+	PromPeople.call(this, name, gender, group, uuid, tel);
+	this.showtype = typeof showtype == "string" ? showtype : "";
+	this.showtime = typeof showtime == "number" ? showtype : 0;
+	this.master = typeof master == "boolean" ? master : false;
+	this.email = typeof email == "string" ? email : "";
+	this.note = typeof note == "string" ? note : "";
 }
 
 module.exports = router;
