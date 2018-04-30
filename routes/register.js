@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var nanoid = require('nanoid');
 const MongoClient = require('mongodb').MongoClient;
 const MONGO_URL = process.env.MONGO_URL;
 const DB_NAME = process.env.DB_NAME;
@@ -8,17 +9,21 @@ const DB_NAME = process.env.DB_NAME;
 router.post('/:type', function(req, res, next) {
 	let request = req.body;
 	let type = req.params.type;
-	if (type != "participants" && type != "hosts" && type != "shows")
+	if ((type != "participants" && type != "hosts" && type != "shows"))
 		next();
 	else{
 		(async function(){
 			let client;
 			try{
 				// Sterilize Input Data
+				let uuid = request.meta.uuid;
+				console.log(nanoid(12));
 				request.meta.type = type;
+				uuid = (uuid == "" || typeof uuid != "string") ? nanoid(12) : uuid;
+				console.log(uuid);
+				request.meta.uuid = uuid;
 				request.participants = request.participants.map(sterilizeData, request.meta);
 				let fee = getFee(request.participants);
-				let uuid = request.meta.uuid;
 				let group = request.meta.group;
 				client = await MongoClient.connect(MONGO_URL);
 				const db = client.db(DB_NAME);
@@ -86,7 +91,7 @@ function getFee(arr){
 				fee += 350;
 				break;
 			case "child":
-				fee += 150;
+				fee += 200;
 				break;
 			case "partner":
 				if(arr[i].class == "")
@@ -126,7 +131,7 @@ function PromShowPerformers(name, gender, group, uuid, tel, showtype, showtime, 
     PromPeople.call(this, name, gender, group, uuid, tel);
 	this.showtype = typeof showtype == "string" ? showtype : "";
 	this.showtime = typeof showtime == "number" ? showtime : 0;
-	this.master = typeof master == "boolean" ? master : false;
+	this.master = master == "yes" ? true : false;
 	this.email = typeof email == "string" ? email : "";
 	this.note = typeof note == "string" ? note : "";
 }

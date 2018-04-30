@@ -13,8 +13,10 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.15.5",
+    "form-serializer": "^2.5.0",
     "mongodb": "^3.0.6",
     "morgan": "~1.9.0",
+    "nanoid": "^1.0.2",
     "pug": "2.0.0-beta11",
     "semantic-ui": "^2.3.1",
     "serve-favicon": "~2.4.5"

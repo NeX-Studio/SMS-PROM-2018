@@ -1,303 +1,219 @@
 extends layout
 
 block content
-	canvas#c
-
-	#app
-		.header
-			p
-				span SHENZHEN MIDDLE SCHOOL
-			p
-				span INTERNATIONAL CURRICULUM
-			h1
-				span
-					| PROM 
-					span.light 2018
-		transition-group(name='fade', mod='out-in')
-			div(key='signupbtn', style='text-align:center', v-show="stage == 'home'")
-				a#signup.lgbtn(href='javascript:void(0)', @click='toMenu') SIGN UP
-				br
-			.menu(key='menu', v-show="stage == 'menu'")
-				.info
-					h4 请选择一项
-				.inputs
-					.input
-						input#t-prom(type='radio', name='type', value='prom', v-model='type')
-						label(for='t-prom') 舞会报名
-						input#t-hosts(type='radio', name='type', value='hosts', v-model='type')
-						label(for='t-hosts') 主持人报名
-						input#t-show(type='radio', name='type', value='shows', v-model='type')
-						label(for='t-show') 节目报名
-				.info
-					a.lgbtn(@click="chooseSignup", href='javascript:void(0)') NEXT
-			.shows(key='hosts', v-if="stage == 'shows' || stage == 'showsubmitted'")
-				.info
-					h4 舞台节目报名
-				transition-group(name='fade', mod='out-in')
-					div(key="shows-1", v-if="stage == 'shows'")
-						.inputs
-							.input
-								span 节目名称
-								input(v-model.trim='shows.showname', type='text')
-							.input
-								span 节目类型
-								input(v-model.trim='shows.showtype', type='text')
-							.input
-								span 节目时长
-								input(style='margin-right:8px;width: 100px;', v-model.trim='shows.showtime', type='number')
-								span(style='border-right:none') 分钟
-						.inputs
-							.input
-								span 负责人姓名
-								input(v-model.trim='shows.name', type='text')
-							.input
-								span 性别
-								input#s-male(type='radio', name='gender', value='male', v-model='shows.gender')
-								label(for='s-male') 男
-								input#s-female(type='radio', name='gender', value='female', v-model='shows.gender')
-								label(for='s-female') 女
-								input#s-other(type='radio', name='gender', value='other', v-model='shows.gender')
-								label(for='s-other') 其他
-							.input
-								span 电话号码
-								input(v-model='shows.tel', type='text')
-							.input
-								span 邮箱
-								input(v-model='shows.email', type='email')
-						.inputs
-							.input
-								span 其他表演者数量
-								input.highlight(@click='deletePerformer', type='button', value='-', style='margin-right:8px')
-								input(:value='shows.performers.length', type='number', disabled='disabled', style='margin-right:8px;width:100px;text-align:center')
-								input.highlight(@click='addPerformer', type='button', value='+')
-						.inputs(v-for='(member, index) in shows.performers')
-							.input
-								span 表演者{{index+1}} 姓名
-								input(v-model.trim='member.name', type='text')
-							.input
-								span 性别
-								input(type='radio', :id="'rm-'+index", value='male', v-model='member.gender')
-								label(:for="'rm-'+index") 男
-								input(type='radio', :id="'rf-'+index", value='female', v-model='member.gender')
-								label(:for="'rf-'+index") 女
-								input(type='radio', :id="'ro-'+index", value='other', v-model='member.gender')
-								label(:for="'ro-'+index") 其他
-						.inputs
-							.input
-								span 备注
-								input(v-model.trim='shows.note', type='text')
-						div(style='text-align:center')
-							a#next.lgbtn(@click='submitShowInfo', href='javascript:void(0)') NEXT
-							br
-							a.smbtn(@click='toMenu', href='javascript:void(0)') BACK
-					.info(key="shows-2", v-if="stage == 'showsubmitted'")
-						p 报名成功！
-			.hosts(key='hosts', v-if="stage == 'hosts' || stage == 'hostsubmitted'")
-				.info
-					h4 主持人报名
-				transition-group(name='fade', mod='out-in')
-					div(key="hosts-1", v-if="stage == 'hosts'")
-						.inputs
-							.input
-								span 姓名
-								input(v-model.trim='hosts.name', type='text')
-							.input
-								span 性别
-								input#h-male(type='radio', name='gender', value='male', v-model='hosts.gender')
-								label(for='h-male') 男
-								input#h-female(type='radio', name='gender', value='female', v-model='hosts.gender')
-								label(for='h-female') 女
-								input#h-other(type='radio', name='gender', value='other', v-model='hosts.gender')
-								label(for='h-other') 其他
-							.input
-								span 班级
-								span 高三
-								select(v-model='hosts.class')
-									option(value='17') (17) 班
-									option(value='18') (18) 班
-									option(value='19') (19) 班
-									option(value='20') (20) 班
-									option(disabled='disabled', value='0', style='font-size:12px') 15级交换/转校生请填原班级
-							.input
-								span 电话号码
-								input(v-model='hosts.tel', type='text')
-						div(style='text-align:center')
-							a#next.lgbtn(@click='submitHostInfo', href='javascript:void(0)') NEXT
-							br
-							a.smbtn(@click='toMenu', href='javascript:void(0)') BACK
-					.info(key="hosts-2", v-if="stage == 'hostsubmitted'")
-						p 报名成功！
-			.signup(key='signup', v-if="stage == 'signup'")
-				.info
-					h4 深圳中学2018届国际体系 毕业舞会
-					p 2018 年 6 月 10 日 18:30
-					p 深圳四季酒店 宴会厅
-				.inputs
-					.input
-						span 学生姓名
-						input(v-model.trim='signup.name', type='text')
-					.input
-						span 性别
-						input#male(type='radio', name='gender', value='male', v-model='signup.gender')
-						label(style='margin-right:8px', for='male') 男
-						input#female(type='radio', name='gender', value='female', v-model='signup.gender')
-						label(for='female') 女
-						input#other(type='radio', name='gender', value='other', v-model='signup.gender')
-						label(for='other') 其他
-					.input
-						span 班级
-						span 高三
-						select(v-model='signup.class')
-							option(value='17') (17) 班
-							option(value='18') (18) 班
-							option(value='19') (19) 班
-							option(value='20') (20) 班
-							option(disabled='disabled', value='0', style='font-size:12px') 15级交换/转校生请填原班级
-					.input
-						span 电话号码
-						input(v-model='signup.phone', type='text')
-				.inputs
-					.input
-						span 家属数量
-						input.highlight(@click='deleteFamilyMember', type='button', value='-', style='margin-right:8px')
-						input(:value='signup.family.length', type='number', disabled='disabled', style='margin-right:8px;width:100px;text-align:center')
-						input.highlight(@click='addFamilyMember', type='button', value='+')
-				.inputs(v-for='(member, index) in signup.family')
-					.input
-						span 家属{{index+1}} 姓名
-						input(v-model.trim='member.name', type='text')
-					.input
-						span 性别
-						input(type='radio', :id="'rm-'+index", value='male', v-model='member.gender')
-						label(:for="'rm-'+index") 男
-						input(type='radio', :id="'rf-'+index", value='female', v-model='member.gender')
-						label(:for="'rf-'+index") 女
-						input(type='radio', :id="'ro-'+index", value='other', v-model='member.gender')
-						label(:for="'ro-'+index") 其他
-					.input
-						span 身份
-						input(type='radio', :id="'rp-'+index", value='parent', v-model='member.type')
-						label(:for="'rp-'+index") 家长
-						input(type='radio', :id="'rc-'+index", value='child', v-model='member.type')
-						label(:for="'rc-'+index") 儿童
-				.inputs
-					.input
-						span 您有舞伴吗?
-						input#s-1(v-model='signup.hasPartner', type='radio', name='hasPartner', value='true')
-						label(style='margin-right:8px', for='s-1') 有
-						input#s-2(v-model='signup.hasPartner', type='radio', name='hasPartner', value='false')
-						label(for='s-2') 没有
-					.input(v-if="signup.hasPartner == 'true'")
-						span 您的舞伴是国体高三学生吗?
-						input#t-1(v-model='signup.partner.isICStudent', type='radio', name='isICStudent', value='true')
-						label(style='margin-right:8px', for='t-1') 是
-						input#t-2(v-model='signup.partner.isICStudent', type='radio', name='isICStudent', value='false')
-						label(for='t-2') 否
-				.inputs(v-if="signup.hasPartner == 'true' && signup.partner.isICStudent")
-					.input
-						span 舞伴姓名
-						input(v-model.trim='signup.partner.name', type='text')
-					.input
-						span 性别
-						input#pmale(v-model='signup.partner.gender', type='radio', name='pgender', value='male')
-						label(for='pmale') 男
-						input#pfemale(v-model='signup.partner.gender', type='radio', name='pgender', value='female')
-						label(for='pfemale') 女
-						input#pother(v-model='signup.partner.gender', type='radio', name='pgender', value='other')
-						label(for='pother') 其他
-					p 国体高三舞伴需单独填写此表单并按所在班级缴费
-				.inputs
-					.input
-						span 以上成员存在过敏或忌口吗?
-						input#a-1(v-model='signup.hasAvoidance', type='radio', name='hasAvoidance', value='true')
-						label(style='margin-right:8px', for='a-1') 是
-						input#a-2(v-model='signup.hasAvoidance', type='radio', name='hasAvoidance', value='false')
-						label(for='a-2') 否
-					.input(v-if="signup.hasAvoidance == 'true'")
-						span 请说明
-						input(v-model.trim='signup.avoidance', type='text')
-				div(style='text-align:center')
-					a#next.lgbtn(@click='checkInfo', href='javascript:void(0)') NEXT
-					br
-					a.smbtn(@click='toMenu', href='javascript:void(0)', v-if="signup.uuid == ''") BACK
-			div(key='detail', v-if="stage == 'detail' || stage == 'submitted'")
-				.info.detail
-					h4
-						b 学生
-						span.dot
-						span.price ￥400
-					p
-						b 姓名：
-						| {{signup.name}}
-					p
-						b 性别：
-						| {{genders[signup.gender]}}
-					p
-						b 班级：
-						| 高三 ({{signup.class}}) 班
-					p
-						b 电话号码：
-						| {{signup.phone}}
-				.info.detail
-					h4
-						b 家属
-						span.dot
-						span.price ￥{{calculateFamilyFee()}}
-				.info.detail(v-for='(member, index) in signup.family')
-					h4
-						| 家属 \#{{index+1}}
-						span.dot
-						span.price ￥{{member.type == 'parent' ? 350 : 150}}
-					p
-						b 姓名：
-						| {{member.name}}
-					p
-						b 性别：
-						| {{genders[member.gender]}}
-					p
-						b 身份：
-						| {{roles[member.type]}}
-				.info.detail(v-if="signup.hasPartner == 'true'")
-					h4
-						b 舞伴
-						span.dot
-						span.price {{signup.partner.isICStudent == 'true' ? '需单独报名/缴费' : '￥400'}}
-					p
-						b 姓名：
-						| {{signup.partner.name}}
-					p
-						b 性别：
-						| {{genders[signup.partner.gender]}}
-				.info.detail
-					h4
-						b 共计
-						span.dot
-						span.price ￥{{calculateTotalFee()}}
-					p
-						b 过敏/忌口：
-						| {{signup.hasAvoidance == 'false' ? '无' : signup.avoidance}}
-				transition-group(name='fade', mod='out-in')
-					div(key='submit-1', style='text-align:center', v-if="stage == 'detail'")
-						a#submit.lgbtn(@click='submitInfo', href='javascript:void(0)') SUBMIT
-						br
-						a.smbtn(@click='toSignup', href='javascript:void(0)') BACK
-					.info(key='submit-2', v-if="stage == 'submitted'")
-						br
-						h4 报名成功！
-						p 您的报名代码为 {{signup.uuid}} ，
-						p 可用于查询或修改报名信息。
-						br
-						h4 您还需按下列步骤缴费
-						p 通过银行汇款 ￥{{calculateTotalFee()}} 至：
-						p XXXXXXXXXXXXXXXX 开户人
-						p XX银行 XX支行
-						p 并备注：还没定
-						a.lgbtn(@click="toSignup", href='javascript:void(0)') EDIT
-						br
-						a.smbtn(href='/') LOGOUT
-
-	script(src='/js/TweenMax.min.js')
-	script(src='/js/wave.js')
-	script(src='/js/zepto.min.js')
-	script(src='/js/app.js')
-
+	// Form Contents
+	.hidden.shows.registration.form
+		.field
+			.field
+				// Create New inputs here
+				.ui.inverted.divider
+				.field
+					label 参与者姓名
+					input(type='text', name='participants[][name]', placeholder='参与者姓名')
+				.field
+					label 参与者性别
+					.ui.selection.dropdown
+						input(type='hidden', name='participants[][gender]', value='male')
+						i.dropdown.icon
+						.default.text 参与者性别
+						.menu
+							.item(data-value='male') 男
+							.item(data-value='female') 女
+							.item(data-value='other') 其他
+				.field
+					label 是否负责人
+					.ui.selection.dropdown
+						input.decision(type='hidden', name='participants[][master]', value='no', data-true='yes')
+						i.dropdown.icon
+						.default.text 是否负责人
+						.menu
+							.item(data-value='yes') 是
+							.item(data-value='no') 否
+				.field.hidden
+					.field
+						label 负责人电话
+						input(type='tel', name='participants[][tel]', placeholder='负责人电话')
+					.field
+						label 负责人邮箱
+						input(type='email', name='participants[][email]', placeholder='负责人邮箱')
+	.hidden.participants.registration.form
+		.field
+			.field
+				// Create New inputs here
+				.ui.inverted.divider
+				.field
+					label 参与者姓名
+					input(type='text', name='participants[][name]', placeholder='参与者姓名', data-validate='name')
+				.field
+					label 参与者性别
+					.ui.selection.dropdown
+						input(type='hidden', name='participants[][gender]', value='male', data-validate='gender')
+						i.dropdown.icon
+						.default.text 参与者性别
+						.menu
+							.item(data-value='male') 男
+							.item(data-value='female') 女
+							.item(data-value='other') 其他
+				.field
+					label 参与者电话
+					input(type='tel', name='participants[][tel]', placeholder='参与者电话', data-validate='tel')
+				.field
+					label 参与者类别
+					.ui.selection.dropdown
+						input.decision(type='hidden', name='participants[][type]', data-validate='type', value='student', data-true='student partner')
+						i.dropdown.icon
+						.default.text 参与者类别
+						.menu
+							.item(data-value='student') 学生
+							.item(data-value='partner') 舞伴
+							.item(data-value='parent') 家长及12岁以上大童
+							.item(data-value='child') 12岁以下小童
+				.field.hidden
+					.field
+						label 学生班级
+						.ui.selection.dropdown
+							input(type='hidden', name='participants[][class]', value='17', data-validate='class')
+							i.dropdown.icon
+							.default.text 学生班级
+							.menu
+								.item(data-value='17') 17班
+								.item(data-value='18') 18班
+								.item(data-value='19') 19班
+								.item(data-value='20') 20班
+								.item(data-value='') 非国体
+				.field
+					label 参与者忌口
+					input(type='text', name='participants[][avoidance]', data-validate='avoidance', placeholder='参与者忌口')
+	.hidden.hosts.registration.form
+		.field
+			.field
+				// Create New inputs here
+				.ui.inverted.divider
+				.field
+					label 申请人姓名
+					input(type='text', name='participants[][name]', placeholder='参与者姓名', data-validate='name')
+				.field
+					label 申请人性别
+					.ui.selection.dropdown
+						input(type='hidden', name='participants[][gender]', value='male', data-validate='gender')
+						i.dropdown.icon
+						.default.text 申请人性别
+						.menu
+							.item(data-value='male') 男
+							.item(data-value='female') 女
+							.item(data-value='other') 其他
+				.field
+					label 申请人电话
+					input(type='tel', name='participants[][tel]', placeholder='申请人电话', data-validate='tel')
+				.field
+					label 申请人班级
+					.ui.selection.dropdown
+						input(type='hidden', name='participants[][class]', value='17', data-validate='class')
+						i.dropdown.icon
+						.default.text 申请人班级
+						.menu
+							.item(data-value='17') 17班
+							.item(data-value='18') 18班
+							.item(data-value='19') 19班
+							.item(data-value='20') 20班
+							.item(data-value='') 非国体
+	form#shows.ui.modal.tiny.inverted.shows.registration.form
+		.header 节目报名
+		i.close.icon
+		.content.center.aligned
+			.field
+				label 节目名称
+				input(type='text', name='meta[group]', data-validate='group', placeholder='节目名称')
+			.field
+				label 节目类型
+				input(type='text', name='meta[showtype]', data-validate='showtype', placeholder='节目类型')
+			.field
+				label 节目时间
+				.ui.right.labeled.input
+					input(type='number', name='meta[showtime]', data-validate='showtime', placeholder='节目时间')
+					.ui.basic.label
+						| min
+			.field
+				label 节目备注
+				.ui.input
+					textarea(rows='5', name='meta[note]', data-validate='note', placeholder='节目备注')
+			.field
+				label 参与人数
+				.ui.action.input
+					input#shows.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='参与人数')
+					a.ui.icon.button
+						i.check.icon
+			.ui.inverted.divider
+			.field
+				label 修改码
+				.ui.input
+					input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
+			button.ui.submit.button(type='submit') 报名
+	form#participants.ui.modal.tiny.participants.registration.inverted.form
+		.header 舞会报名
+		i.close.icon
+		.content.center.aligned
+			.field
+				label 参与人数
+				.ui.action.input
+					input#participants.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='参与人数')
+					a.ui.icon.button
+						i.check.icon
+			.ui.inverted.divider
+			.field
+				label 修改码
+				.ui.input
+					input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
+			button.ui.submit.button(type='submit') 报名
+	form#hosts.ui.modal.inverted.tiny.registration.hosts.form
+		.header 主持报名
+		i.close.icon
+		.content.center.aligned
+			.field
+				label 申请人数
+				.ui.action.input
+					input#hosts.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='申请人数')
+					a.ui.icon.button
+						i.check.icon
+			.ui.inverted.divider
+			.field
+				label 修改码
+				.ui.input
+					input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
+			button.ui.submit.button(type='submit') 报名
+	// Page Contents
+	.pusher
+		.ui.center.aligned.inverted.poster.segment
+			.ui.banner.container
+				img.title(alt='title', src='images/title.png')
+				div
+				.ui.basic.registration.buttons
+					#shows.ui.registration.button(style='color: white !important;') 节目报名
+					#participants.ui.registration.middle.button(style='color: white !important;') 舞会报名
+					#hosts.ui.registration.button(style='color: white !important;') 主持报名
+				.ui.horizontal.divider
+					a#slideIn
+						i.chevron.down.icon.inverted.grey
+		.ui.center.aligned.bulletin.grid
+			.row
+			- for (var i = 0; i < bulletins.length; i++)
+				.row.ten.wide.tablet.twelve.wide.phone.eight.wide.computer.column
+					a(href=`${bulletins[i].link}`).ui.raised.inverted.left.aligned.segment
+						h2.ui.header= bulletins[i].title
+						p= bulletins[i].text
+			.row
+		.ui.inverted.vertical.footer.segment
+			.ui.center.aligned.container
+				.ui.hidden.divider
+				h4
+					| © 2018 SMS PROM | Design by 
+					a(href='http://nexstudio.us') NeX-Studio
+					|  | Code by 
+					a(href='https://blog.thexyzlab.studio') TheXYZLab
+					|  with effort and 
+					i.icon.heart
+				.ui.hidden.divider
+	script(src='https://code.jquery.com/jquery-3.1.1.min.js', integrity='sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=', crossorigin='anonymous')
+	script(src='jquery.serialize-object.min.js')
+	script(src='semantic.min.js')
+	script(src='site.js')

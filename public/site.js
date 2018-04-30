@@ -1,3 +1,10 @@
+//Form Submission Entries
+$.fn.api.settings.api = {
+  'submit hosts registration' : '/register/hosts',
+  'submit participants registration' : '/register/participants',
+  'submit shows registration' : '/register/shows'
+};
+
 // Form Popup
 $(".form.ui.tiny.modal").each(function(){
     $(this)
@@ -15,6 +22,7 @@ $(".form.ui.tiny.modal").each(function(){
         })
 });
 
+// Form Load
 $("input.amount").each(function(){
     $(this).change(function(){
         let amount = parseInt($(this).val());
@@ -39,10 +47,102 @@ $("input.amount").each(function(){
         $('.ui.dropdown')
           .dropdown()
         ;
+        $(".ui.form").form({
+            revalidate: 'true',
+            on: 'submit',
+            fields:{
+                amount: "integer[1..10]",
+                showtime: "integer[1..120]",
+                showtype: "empty",
+                name: "empty",
+                gender: "empty",
+                tel: "exactLength[11]",
+                group: "empty",
+                type: "empty",
+                email: "email"
+            }
+        });
+        
+        // Form Submission
+
+        $(".ui.form.registration.hosts").api({
+            action: "submit hosts registration",
+            method: "POST",
+            serializeForm: true,
+            beforeSend: function(settings){
+                settings.data.meta.group = settings.data.participants[0].name;
+                settings.data = JSON.stringify({
+                    meta: settings.data.meta,
+                    participants: settings.data.participants
+                })
+                return settings;
+            },
+            beforeXHR: function(xhr) {
+              // adjust XHR with additional headers
+              xhr.setRequestHeader ('Content-Type', 'application/json');
+              return xhr;
+            }
+        });
+
+        $(".ui.form.registration.shows").api({
+            action: "submit shows registration",
+            method : 'POST',
+            serializeForm: true,
+            defaultData: false,
+            beforeSend: function(settings){
+                settings.data = JSON.stringify({
+                    meta: settings.data.meta,
+                    participants: settings.data.participants
+                })
+                return settings;
+            },
+            beforeXHR: function(xhr) {
+              // adjust XHR with additional headers
+              xhr.setRequestHeader ('Content-Type', 'application/json');
+              return xhr;
+            }
+        });
+
+        $(".ui.form.registration.participants").api({
+            action: "submit participants registration",
+            method : 'POST',
+            serializeForm: true,
+            defaultData: false,
+            beforeSend: function(settings){
+                let arr = settings.data.participants;
+                settings.data.meta.group = arr[arr.findIndex(function(currentValue, idx){
+                    if(currentValue.type == "student")
+                        return true;
+                })].name;
+                settings.data = JSON.stringify({
+                    meta: settings.data.meta,
+                    participants: settings.data.participants
+                })
+                return settings;
+            },
+            beforeXHR: function(xhr) {
+              // adjust XHR with additional headers
+              xhr.setRequestHeader ('Content-Type', 'application/json');
+              return xhr;
+            }
+        });
+
     });
 });
 
-$("a#slideIn").click(function(){
-    
-})
-
+// Form Validate Rules
+$(".ui.form").form({
+    revalidate: 'true',
+    on: 'submit',
+    fields:{
+        amount: "integer[1..10]",
+        name: "empty",
+        gender: "empty",
+        tel: "exactLength[11]",
+        group: "empty",
+        type: "empty",
+        email: "email",
+        showtime: "integer[1..120]",
+        showtype: "empty"
+    }
+});
