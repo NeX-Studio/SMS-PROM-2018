@@ -17,14 +17,18 @@ router.post('/:type', function(req, res, next) {
 			try{
 				// Sterilize Input Data
 				let uuid = request.meta.uuid;
+				let group = request.meta.group
+				let class_ = request.meta.class;
 				console.log(nanoid(12));
 				request.meta.type = type;
 				uuid = (uuid == "" || typeof uuid != "string") ? nanoid(12) : uuid;
-				console.log(uuid);
+				group = typeof uuid != "string" ? "" : group;
+				class_ = (typeof class_ != "string" || (class_ != "17" && class_ != "18" && class_ != "19" && class_ != "20")) ? "" : class_ ;
 				request.meta.uuid = uuid;
+				request.meta.group = group;
+
 				request.participants = request.participants.map(sterilizeData, request.meta);
 				let fee = getFee(request.participants);
-				let group = request.meta.group;
 				client = await MongoClient.connect(MONGO_URL);
 				const db = client.db(DB_NAME);
 				let cursor = await db.collection(type).findOne({"uuid": uuid});
@@ -32,7 +36,7 @@ router.post('/:type', function(req, res, next) {
 					// Update Documents
 					cursor = await db.collection(type).deleteMany({"uuid": uuid});
 					cursor = await db.collection(type).insertMany(request.participants);
-					res.status(200).json({errcode: 0, errmsg: "", fee: fee})
+					res.status(200).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_})
 				}
 				else {
 					cursor = await db.collection(type).findOne({"group": group});
@@ -44,7 +48,7 @@ router.post('/:type', function(req, res, next) {
 						// Insert documents
 						cursor = await db.collection(type).insertMany(request.participants);
 						// TODO Return Object
-						res.status(201).json({errcode: 0, errmsg: "", fee: fee});
+						res.status(201).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_});
 					}
 				}
 			} catch(err){

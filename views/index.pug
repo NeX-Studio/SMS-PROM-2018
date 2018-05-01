@@ -9,11 +9,11 @@ block content
 				.ui.inverted.divider
 				.field
 					label 参与者姓名
-					input(type='text', name='participants[][name]', placeholder='参与者姓名')
+					input(type='text', name='participants[][name]', placeholder='参与者姓名' data-validate='name')
 				.field
 					label 参与者性别
 					.ui.selection.dropdown
-						input(type='hidden', name='participants[][gender]', value='male')
+						input(type='hidden', name='participants[][gender]', value='male' data-validate='gender')
 						i.dropdown.icon
 						.default.text 参与者性别
 						.menu
@@ -60,7 +60,7 @@ block content
 				.field
 					label 参与者类别
 					.ui.selection.dropdown
-						input.decision(type='hidden', name='participants[][type]', data-validate='type', value='student', data-true='student partner')
+						input.decision(type='hidden', name='participants[][type]', data-validate='type', value='child', data-true='student partner')
 						i.dropdown.icon
 						.default.text 参与者类别
 						.menu
@@ -149,6 +149,9 @@ block content
 				.ui.input
 					input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
 			button.ui.submit.button(type='submit') 报名
+			.ui.message(class="hidden")
+				.header
+				.list
 	form#participants.ui.modal.tiny.participants.registration.inverted.form
 		.header 舞会报名
 		i.close.icon
@@ -165,6 +168,9 @@ block content
 				.ui.input
 					input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
 			button.ui.submit.button(type='submit') 报名
+			.ui.message(class="hidden")
+				.header
+				.list
 	form#hosts.ui.modal.inverted.tiny.registration.hosts.form
 		.header 主持报名
 		i.close.icon
@@ -180,7 +186,10 @@ block content
 				label 修改码
 				.ui.input
 					input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
-			button.ui.submit.button(type='submit') 报名
+			button.ui.submit.button(type='submit') 报名         
+			.ui.message(class="hidden")
+				.header
+				.list
 	// Page Contents
 	.pusher
 		.ui.center.aligned.inverted.poster.segment

@@ -42,6 +42,24 @@ form.ui.modal.tiny.form .menu {
     border: none !important;
 }
 
+form.ui.modal.tiny.form .message.success {
+    background-color: #fcfff5;
+    color: #2c662d; 
+}
+
+form.ui.modal.tiny.form .message.success .header {
+    color: #1a531b !important;
+}
+
+form.ui.modal.tiny.form .message.error {
+    background-color: #fff6f6;
+    color: #9f3a38;
+}
+
+form.ui.modal.tiny.form .message.error .header {
+    color: #912d2b !important;
+}
+
 .poster.segment {
     min-height: 100vh;
     display: grid;
