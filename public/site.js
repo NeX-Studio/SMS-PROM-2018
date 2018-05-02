@@ -113,7 +113,7 @@ $("input.amount").each(function(){
                 msg.addClass("error");
                 msg.find(".header").text("报名失败");
                 msg.find(".list").empty();
-                msg.find(".list").append("<li>此次表单提交未授权</li>");
+                msg.find(".list").append("<li>此次表单提交失败</li>");
                 msg.find(".list").append("<li>已经提交过? 请填写修改码重新提交</li>");
                 msg.find(".list").append("<li>从未提交过? 请联系舞会负责人</li>");
                 msg.transition('vertical flip in');

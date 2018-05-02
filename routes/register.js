@@ -23,72 +23,71 @@ router.post('/:type', function(req, res, next) {
 				let uuid = request.meta.uuid;
 				let group = request.meta.group
 				let class_ = request.meta.class;
-				let smsTel = request.meta.smsTel;
-				
+				let smsTel = request.meta.tel;
+				if(typeof smsTel != "string" || smsTel.length != 11)
+					next();
+				else{
+					uuid = (uuid == "" || typeof uuid != "string") ? nanoid(12) : uuid;
+					group = typeof group != "string" ? "" : group;
+					class_ = (typeof class_ != "string" || (class_ != "17" && class_ != "18" && class_ != "19" && class_ != "20")) ? "" : class_ ;
 
-				uuid = (uuid == "" || typeof uuid != "string") ? nanoid(12) : uuid;
-				group = typeof uuid != "string" ? "" : group;
-				class_ = (typeof class_ != "string" || (class_ != "17" && class_ != "18" && class_ != "19" && class_ != "20")) ? "" : class_ ;
-
-				request.meta.type = type;
-				request.meta.uuid = uuid;
-				request.meta.group = group;
-				request.meta.submitTime = Date().toString();
-				request.participants = request.participants.map(sterilizeData, request.meta);
-				let fee = getFee(request.participants);
-				client = await MongoClient.connect(MONGO_URL);
-				const db = client.db(DB_NAME);
-				let cursor = await db.collection(type).findOne({"uuid": uuid});
-				if (cursor){
-					// Update Documents
-					cursor = await db.collection(type).deleteMany({"uuid": uuid});
-					cursor = await db.collection(type).insertMany(request.participants);
-					res.status(200).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_})
-				}
-				else {
-					cursor = await db.collection(type).findOne({"group": group});
-					// If attempts to add to same group without authorization happen
+					request.meta.type = type;
+					request.meta.uuid = uuid;
+					request.meta.group = group;
+					request.meta.submitTime = Date().toString();
+					request.participants = request.participants.map(sterilizeData, request.meta);
+					let fee = getFee(request.participants);
+					client = await MongoClient.connect(MONGO_URL);
+					const db = client.db(DB_NAME);
+					let cursor = await db.collection(type).findOne({"uuid": uuid});
 					if (cursor){
-						res.status(401).json({errorcode: 10005, errmsg: 'Invalid uuid'});
-					}
-					else{
-						// Insert documents
+						// Update Documents
+						cursor = await db.collection(type).deleteMany({"uuid": uuid});
 						cursor = await db.collection(type).insertMany(request.participants);
-
-						// Send SMS code
-						let formType = "";
-						let contactName = request.meta.group;
-						switch(type){
-							case "participants":
-								formType = "舞会报名表单";
-								break;
-							case "hosts":
+						res.status(200).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_})
+					}
+					else {
+						cursor = await db.collection(type).findOne({"group": group});
+						// If attempts to add to same group without authorization happen
+						if (cursor){
+							res.status(401).json({errorcode: 10005, errmsg: 'Invalid uuid'});
+						}
+						else{
+							// Insert documents
+							cursor = await db.collection(type).insertMany(request.participants);
+							// Send SMS code
+							let formType = "";
+							let contactName = request.meta.group;
+							switch(type){
+								case "participants":
+									formType = "舞会报名表单";
+									break;
+								case "hosts":
 									formType = "主持报名表单";
 									break;
-							case "shows":
-								formType = "节目报名表单";
-
-								break;
-						}
-
-
-						
-						smsClient.sendSMS({
-							PhoneNumbers: smsTel,
-							SignName: 'NeX与XYZ',
-							TemplateCode: 'SMS_133962020',
-							TemplateParam: '{"code":"12345"}'
-						}.then(function(res){
-							let {Code}=res
-							if (Code === 'OK') {
-								console.log(res)
+								case "shows":
+									formType = "节目报名表单";
+									contactName += "负责人";
+									break;
 							}
-						}, function(err){
-							console.log(err)
-						}));
 
-						// TODO Return Object
-						res.status(201).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_});
+							TemplateParam = {
+								formType: formType,
+								name: contactName,
+								uuid: uuid
+							}
+
+
+							await smsClient.sendSMS({
+								PhoneNumbers: smsTel,
+								SignName: 'NeX与XYZ',
+								TemplateCode: 'SMS_133962020',
+								TemplateParam: JSON.stringify(TemplateParam)
+							});
+
+							// TODO Return Object
+							res.status(201).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_});
+						}
 					}
 				}
 			} catch(err){
