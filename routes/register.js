@@ -29,6 +29,7 @@ router.post('/:type', function(req, res, next) {
 				let group = request.meta.group
 				let class_ = request.meta.class;
 				let smsTel = request.meta.tel;
+				let amount = request.meta.amount;
 				if(typeof smsTel != "string" || smsTel.length != 11)
 					next();
 				else{
@@ -97,18 +98,18 @@ router.post('/:type', function(req, res, next) {
 								fee: fee
 							}
 
-							await smsClient.sendSMS({
+							/*await smsClient.sendSMS({
 								PhoneNumbers: smsTel,
 								SignName: smsSignature,
 								TemplateCode: smsCode,
 								TemplateParam: JSON.stringify(TemplateParam)
-							});
+							});*/
 
 							// Insert documents
 							cursor = await db.collection(type).insertMany(request.participants);
 
 							// TODO Return Object
-							res.status(201).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_, contact: contact});
+							res.status(201).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_, contact: contact, amount: amount});
 						}
 					}
 				}

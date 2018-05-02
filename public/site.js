@@ -100,7 +100,7 @@ $("input.amount").each(function(){
                 msg.addClass("success");
                 msg.find(".header").text("报名完成");
                 msg.find(".list").empty();
-                msg.find(".list").append("<li>请耐心等候, 我们将很快与你联系</li>");
+                msg.find(".list").append("<li>我们已收到您的主持报名申请，请耐心等候，我们的工作人员将尽快与您取得联系</li>");
                 msg.find(".list").append("<li>修改码: " + response.uuid + "</li>");
                 msg.transition('vertical flip in');
             },
@@ -170,7 +170,7 @@ $("input.amount").each(function(){
                 msg.addClass("success");
                 msg.find(".header").text("报名完成");
                 msg.find(".list").empty();
-                msg.find(".list").append("<li>请耐心等候, 我们将很快与你联系</li>");
+                msg.find(".list").append("<li>我们已收到您的节目报名申请，请耐心等候，我们的工作人员将尽快与您取得联系</li>");
                 msg.find(".list").append("<li>修改码: " + response.uuid + "</li>");
                 msg.transition('vertical flip in');
             },
@@ -242,9 +242,10 @@ $("input.amount").each(function(){
                 msg.addClass("success");
                 msg.find(".header").text("报名完成");
                 msg.find(".list").empty();
-                msg.find(".list").append("<li>请尽快联系家委会负责人进行付款</li>");
-                msg.find(".list").append("<li>付款金: " + response.fee + "</li>");
-                msg.find(".list").append("<li>负责人: "+ contact + "</li>");
+                msg.find(".list").append("<li>我们已经收到了您的报名信息，请于2018年5月10日24:00前联系家委会负责人支付报名费用</li>");
+                msg.find(".list").append("<li>总参与人数: " + response.amount + "</li>");
+                msg.find(".list").append("<li>需支付金额: " + response.fee + "</li>");
+                msg.find(".list").append("<li>收费负责人: "+ contact + "</li>");
                 msg.find(".list").append("<li>修改码: " + response.uuid + "</li>");
                 msg.transition('vertical flip in');
             },

@@ -134,7 +134,7 @@ body {
 .ui.modal.form > .close {
     top: 1.0535rem;
     right: 1rem;
-    /*color: rgba(0, 0, 0, .87);*/
+    color: #fff;
 }
 
 @media screen and (max-width: 600px) {
