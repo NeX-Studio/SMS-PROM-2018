@@ -39,3 +39,8 @@
 		* [Pug Engine](https://pugjs.org)
 * Database
 	* [MongoDB](https://docs.mongodb.com/)
+
+## Issues
+* Form validate only for single participant
+* Some phones will wrongly display input element
+* Dropdown need to click twice if click the little arrow on the right
