@@ -1,9 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var nanoid = require('nanoid');
+const SMSClient = require('@alicloud/sms-sdk')
 const MongoClient = require('mongodb').MongoClient;
 const MONGO_URL = process.env.MONGO_URL;
 const DB_NAME = process.env.DB_NAME;
+const accessKeyId = process.env.ACCESSKEYID;
+const secretAccessKey = process.env.SECRETACCESSKEY;
+let smsClient = new SMSClient({accessKeyId, secretAccessKey});
 
 /* Form Submission Backend */
 router.post('/:type', function(req, res, next) {
@@ -19,10 +23,14 @@ router.post('/:type', function(req, res, next) {
 				let uuid = request.meta.uuid;
 				let group = request.meta.group
 				let class_ = request.meta.class;
-				request.meta.type = type;
+				let smsTel = request.meta.smsTel;
+				
+
 				uuid = (uuid == "" || typeof uuid != "string") ? nanoid(12) : uuid;
 				group = typeof uuid != "string" ? "" : group;
 				class_ = (typeof class_ != "string" || (class_ != "17" && class_ != "18" && class_ != "19" && class_ != "20")) ? "" : class_ ;
+
+				request.meta.type = type;
 				request.meta.uuid = uuid;
 				request.meta.group = group;
 				request.meta.submitTime = Date().toString();
@@ -46,6 +54,39 @@ router.post('/:type', function(req, res, next) {
 					else{
 						// Insert documents
 						cursor = await db.collection(type).insertMany(request.participants);
+
+						// Send SMS code
+						let formType = "";
+						let contactName = request.meta.group;
+						switch(type){
+							case "participants":
+								formType = "舞会报名表单";
+								break;
+							case "hosts":
+									formType = "主持报名表单";
+									break;
+							case "shows":
+								formType = "节目报名表单";
+
+								break;
+						}
+
+
+						
+						smsClient.sendSMS({
+							PhoneNumbers: smsTel,
+							SignName: 'NeX与XYZ',
+							TemplateCode: 'SMS_133962020',
+							TemplateParam: '{"code":"12345"}'
+						}.then(function(res){
+							let {Code}=res
+							if (Code === 'OK') {
+								console.log(res)
+							}
+						}, function(err){
+							console.log(err)
+						}));
+
 						// TODO Return Object
 						res.status(201).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_});
 					}

@@ -76,6 +76,7 @@ $("input.amount").each(function(){
             serializeForm: true,
             beforeSend: function(settings){
                 settings.data.meta.group = settings.data.participants[0].name;
+                settings.data.meta.tel = settings.data.participants[0].tel;
                 settings.data = JSON.stringify({
                     meta: settings.data.meta,
                     participants: settings.data.participants
@@ -137,6 +138,12 @@ $("input.amount").each(function(){
             method : 'POST',
             serializeForm: true,
             beforeSend: function(settings){
+                let arr = settings.data.participants;
+                let masteridx = arr.findIndex(function(currentValue, idx){
+                    if(currentValue.master == "yes")
+                        return true;
+                });
+                settings.data.meta.tel = arr[masteridx].tel;
                 settings.data = JSON.stringify({
                     meta: settings.data.meta,
                     participants: settings.data.participants
@@ -204,6 +211,7 @@ $("input.amount").each(function(){
                         return true;
                 });
                 settings.data.meta.class = arr[masteridx].class;
+                settings.data.meta.tel = arr[masteridx].tel;
                 settings.data.meta.group = arr[masteridx].name;
                 settings.data = JSON.stringify({
                     meta: settings.data.meta,
@@ -254,9 +262,9 @@ $("input.amount").each(function(){
                 msg.transition('vertical flip in');
             },
             onFailure: function(response, element) {
-                $(this).closest("form").removeClass("success error");
-                $(this).closest("form").addClass("error");
-                let msg = $(this).next(".ui.message");
+                $(this).removeClass("success error");
+                $(this).addClass("error");
+                let msg = $(this).find(".ui.message");
                 // toggle?
                 msg.removeClass("success");
                 msg.addClass("error");
@@ -268,9 +276,9 @@ $("input.amount").each(function(){
                 msg.transition('vertical flip in');
             },
             onError: function(errorMessage, element) {
-                $(this).closest("form").removeClass("success error");
-                $(this).closest("form").addClass("error");
-                let msg = $(this).next(".ui.message");
+                $(this).removeClass("success error");
+                $(this).addClass("error");
+                let msg = $(this).find(".ui.message");
                 // toggle?
                 msg.removeClass("success");
                 msg.addClass("error");

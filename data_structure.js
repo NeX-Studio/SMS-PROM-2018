@@ -30,7 +30,7 @@ var Participants = {
             "class": "",
 
             // PromShowPerformers Only Options
-            "master": false, // Do you in charge of this?
+            "master": "yes", // Do you in charge of this?
             "email": ""
         }
     ]
