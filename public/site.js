@@ -143,7 +143,10 @@ $("input.amount").each(function(){
                     if(currentValue.master == "yes")
                         return true;
                 });
+                if (masteridx < 0)
+                    $(this).api("abort");
                 settings.data.meta.tel = arr[masteridx].tel;
+                settings.data.meta.master = arr[masteridx].name;
                 settings.data = JSON.stringify({
                     meta: settings.data.meta,
                     participants: settings.data.participants
@@ -229,23 +232,7 @@ $("input.amount").each(function(){
             },
             onSuccess: function(response, element) {
               // valid response and response.success = true
-                var contact = "";
-                switch(response.class){
-                    case "17":
-                        contact = "张泽惠父亲 13632554826"
-                        break;
-                    case "18":
-                        contact = "曹炜杰母亲 13500043618"
-                        break;
-                    case "19":
-                        contact = "陈嘉良父亲 13602517135"
-                        break;
-                    case "20":
-                        contact = "毕欣怡母亲 13928497026"
-                        break;
-                    default:
-                        contact = "刘 颖 恒 13530240190"
-                };
+                let contact = response.contact;
                 //console.log("switch");
                 $(this).removeClass("success error");
                 $(this).addClass("success");

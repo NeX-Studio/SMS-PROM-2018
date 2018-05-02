@@ -30,7 +30,6 @@ router.post('/:type', function(req, res, next) {
 					uuid = (uuid == "" || typeof uuid != "string") ? nanoid(12) : uuid;
 					group = typeof group != "string" ? "" : group;
 					class_ = (typeof class_ != "string" || (class_ != "17" && class_ != "18" && class_ != "19" && class_ != "20")) ? "" : class_ ;
-
 					request.meta.type = type;
 					request.meta.uuid = uuid;
 					request.meta.group = group;
@@ -55,38 +54,56 @@ router.post('/:type', function(req, res, next) {
 						else{
 							// Insert documents
 							cursor = await db.collection(type).insertMany(request.participants);
+							
 							// Send SMS code
-							let formType = "";
-							let contactName = request.meta.group;
+							let contactName = group;
+							let smsType = "";
+							let contact = "";
 							switch(type){
 								case "participants":
-									formType = "舞会报名表单";
+									smsType = "SMS_133967493";
+									switch(class_){
+										case "17":
+											contact = "张泽惠父亲 13632554826";
+											break;
+										case "18":
+											contact = "曹炜杰母亲 13500043618";
+											break;
+										case "19":
+											contact = "陈嘉良父亲 13602517135";
+											break;
+										case "20":
+											contact = "毕欣怡母亲 13928497026";
+											break;
+										default:
+											contact = "刘 颖 恒 13530240190";
+									};
 									break;
 								case "hosts":
-									formType = "主持报名表单";
+									smsType = "SMS_133977436";
 									break;
 								case "shows":
-									formType = "节目报名表单";
-									contactName += "负责人";
+									smsType = "SMS_133977433";
+									contactName = request.meta.master;
 									break;
 							}
 
 							TemplateParam = {
-								formType: formType,
 								name: contactName,
-								uuid: uuid
+								uuid: uuid,
+								contact: contact,
+								fee: fee
 							}
-
 
 							await smsClient.sendSMS({
 								PhoneNumbers: smsTel,
-								SignName: 'NeX与XYZ',
-								TemplateCode: 'SMS_133962020',
+								SignName: 'SMSPROM2018',
+								TemplateCode: smsType,
 								TemplateParam: JSON.stringify(TemplateParam)
 							});
 
 							// TODO Return Object
-							res.status(201).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_});
+							res.status(201).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_, contact: contact});
 						}
 					}
 				}
