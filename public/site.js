@@ -222,7 +222,6 @@ $("input.amount").each(function(){
             onSuccess: function(response, element) {
               // valid response and response.success = true
                 var contact = "";
-                console.log("switch");
                 switch(response.class){
                     case "17":
                         contact = "张泽惠父亲 13632554826"
@@ -240,9 +239,9 @@ $("input.amount").each(function(){
                         contact = "刘 颖 恒 13530240190"
                 };
                 console.log("switch");
-                $(this).closest("form").removeClass("success error");
-                $(this).closest("form").addClass("success");
-                let msg = $(this).next(".ui.message");
+                $(this).removeClass("success error");
+                $(this).addClass("success");
+                let msg = $(this).find(".ui.message");
                 console.log(element);
                 msg.removeClass("error");
                 msg.addClass("success");

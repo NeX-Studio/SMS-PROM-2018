@@ -26,7 +26,7 @@ router.post('/:type', function(req, res, next) {
 				class_ = (typeof class_ != "string" || (class_ != "17" && class_ != "18" && class_ != "19" && class_ != "20")) ? "" : class_ ;
 				request.meta.uuid = uuid;
 				request.meta.group = group;
-
+				request.meta.submitTime = Date().toString();
 				request.participants = request.participants.map(sterilizeData, request.meta);
 				let fee = getFee(request.participants);
 				client = await MongoClient.connect(MONGO_URL);
@@ -64,11 +64,11 @@ function sterilizeData(val){
 	// Traverse attributes in input
 	switch(this.type){
 		case "participants":
-			return new PromParticipants(val.name, val.gender, this.group, this.uuid, val.tel, val.type, val.avoidance, val.class);
+			return new PromParticipants(val.name, val.gender, this.group, this.uuid, val.tel, this.submitTime, val.type, val.avoidance, val.class);
 		case "hosts": 
-			return new PromHosts(val.name, val.gender, this.group, this.uuid, val.tel, val.class);
+			return new PromHosts(val.name, val.gender, this.group, this.uuid, val.tel, this.submitTime, val.class);
 		case "shows":
-			return new PromShowPerformers(val.name, val.gender, this.group, this.uuid, val.tel, this.showtype, this.showtime, val.master, val.email, this.note);
+			return new PromShowPerformers(val.name, val.gender, this.group, this.uuid, val.tel, this.submitTime, this.showtype, this.showtime, val.master, val.email, this.note);
 	}
 }
 
@@ -111,28 +111,29 @@ function getFee(arr){
 	return fee
 }
 
-function PromPeople(name, gender, group, uuid, tel){
+function PromPeople(name, gender, group, uuid, tel, submitTime){
 	this.name = typeof name == "string" ? name : "";
 	this.gender = typeof gender == "string" ? gender : "";
 	this.group = typeof group == "string" ? group : "";
 	this.uuid = typeof uuid == "string" ? uuid : "";
 	this.tel = typeof tel == "string" ? tel : "";
+	this.submitTime = typeof submitTime == "string" ? submitTime : "";
 }
 
-function PromParticipants(name, gender, group, uuid, tel, type, avoidance, class_){
-	PromPeople.call(this, name, gender, group, uuid, tel);
+function PromParticipants(name, gender, group, uuid, tel, submitTime, type, avoidance, class_){
+	PromPeople.call(this, name, gender, group, uuid, tel, submitTime);
 	this.type = typeof type == "string" ? type : "";
 	this.avoidance = typeof avoidance == "string" ? avoidance : "";
 	this.class = typeof class_ == "string" ? class_ : "";
 }
 
-function PromHosts(name, gender, group, uuid, tel, class_){
-	PromPeople.call(this, name, gender, group, uuid, tel);
+function PromHosts(name, gender, group, uuid, tel, submitTime, class_){
+	PromPeople.call(this, name, gender, group, uuid, tel, submitTime);
 	this.class = class_;
 }
 
-function PromShowPerformers(name, gender, group, uuid, tel, showtype, showtime, master, email, note){
-    PromPeople.call(this, name, gender, group, uuid, tel);
+function PromShowPerformers(name, gender, group, uuid, tel, submitTime,  showtype, showtime, master, email, note){
+    PromPeople.call(this, name, gender, group, uuid, tel, submitTime);
 	this.showtype = typeof showtype == "string" ? showtype : "";
 	this.showtime = typeof showtime == "number" ? showtime : 0;
 	this.master = master == "yes" ? true : false;
