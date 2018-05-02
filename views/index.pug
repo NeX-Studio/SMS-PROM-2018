@@ -118,7 +118,9 @@ block content
 							.item(data-value='20') 20班
 							.item(data-value='') 非国体
 	form#shows.ui.modal.tiny.inverted.shows.registration.form
-		.header 节目报名
+		.header
+			img.ui.image.small.middle.aligned.left.floated(src='images/logo.png')
+			| | 节目报名
 		i.close.icon
 		.content.center.aligned
 			.field
@@ -150,7 +152,9 @@ block content
 					input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
 			button.ui.submit.button(type='submit') 报名
 	form#participants.ui.modal.tiny.participants.registration.inverted.form
-		.header 舞会报名
+		.header
+			img.ui.image.small.middle.aligned.left.floated(src='images/logo.png')
+			| | 舞会报名
 		i.close.icon
 		.content.center.aligned
 			.field
@@ -166,7 +170,9 @@ block content
 					input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
 			button.ui.submit.button(type='submit') 报名
 	form#hosts.ui.modal.inverted.tiny.registration.hosts.form
-		.header 主持报名
+		.header
+			img.ui.image.small.middle.aligned.left.floated(src='images/logo.png')
+			| | 主持报名
 		i.close.icon
 		.content.center.aligned
 			.field
@@ -194,10 +200,10 @@ block content
 				.ui.horizontal.divider
 					a#slideIn
 						i.chevron.down.icon.inverted.grey
-		.ui.center.aligned.bulletin.grid
+		.ui.center.aligned.bulletin.grid.fourteen.column.container
 			.row
 			- for (var i = 0; i < bulletins.length; i++)
-				.row.ten.wide.tablet.twelve.wide.phone.eight.wide.computer.column
+				.row.twelve.wide.tablet.fourteen.wide.phone.ten.wide.computer.column
 					a(href=`${bulletins[i].link}`).ui.raised.inverted.left.aligned.segment
 						h2.ui.header= bulletins[i].title
 						p= bulletins[i].text
