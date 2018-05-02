@@ -5,7 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 const MONGO_URL = process.env.MONGO_URL;
 const DB_NAME = process.env.DB_NAME;
 
-/* GET users listing. */
+/* Form Submission Backend */
 router.post('/:type', function(req, res, next) {
 	let request = req.body;
 	let type = req.params.type;
@@ -19,7 +19,6 @@ router.post('/:type', function(req, res, next) {
 				let uuid = request.meta.uuid;
 				let group = request.meta.group
 				let class_ = request.meta.class;
-				console.log(nanoid(12));
 				request.meta.type = type;
 				uuid = (uuid == "" || typeof uuid != "string") ? nanoid(12) : uuid;
 				group = typeof uuid != "string" ? "" : group;

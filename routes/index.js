@@ -12,7 +12,6 @@ router.get('/', function(req, res, next) {
 			client = await MongoClient.connect(MONGO_URL);
 			const db = client.db(DB_NAME);
 			let bulletins = await db.collection("bulletins").find({}).toArray();
-			console.log(bulletins);
 			res.locals.bulletins = bulletins;
 			res.render('index');
 		} catch(err){

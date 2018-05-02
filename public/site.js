@@ -238,11 +238,11 @@ $("input.amount").each(function(){
                     default:
                         contact = "刘 颖 恒 13530240190"
                 };
-                console.log("switch");
+                //console.log("switch");
                 $(this).removeClass("success error");
                 $(this).addClass("success");
                 let msg = $(this).find(".ui.message");
-                console.log(element);
+                //console.log(element);
                 msg.removeClass("error");
                 msg.addClass("success");
                 msg.find(".header").text("报名完成");

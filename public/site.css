@@ -82,10 +82,12 @@ img.title {
     background: rgba(0, 0, 0, 0.5) !important;
 }
 
+/*
 .ui.horizontal.divider {
     position: absolute;
     bottom: 10px;
 }
+*/
 
 /* .buttons.registration .button.registration.middle {
 border-left-width: 1px;
