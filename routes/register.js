@@ -7,6 +7,11 @@ const MONGO_URL = process.env.MONGO_URL;
 const DB_NAME = process.env.DB_NAME;
 const accessKeyId = process.env.ACCESSKEYID;
 const secretAccessKey = process.env.SECRETACCESSKEY;
+const participantsSMSCode = process.env.PARTICIPANTS_SMSCODE;
+const hostsSMSCode = process.env.HOSTS_SMSCODE;
+const showsSMSCode = process.env.SHOWS_SMSCODE;
+const smsSignature = process.env.SMS_SIGNATURE;
+
 let smsClient = new SMSClient({accessKeyId, secretAccessKey});
 
 /* Form Submission Backend */
@@ -52,16 +57,13 @@ router.post('/:type', function(req, res, next) {
 							res.status(401).json({errorcode: 10005, errmsg: 'Invalid uuid'});
 						}
 						else{
-							// Insert documents
-							cursor = await db.collection(type).insertMany(request.participants);
-							
 							// Send SMS code
 							let contactName = group;
-							let smsType = "";
+							let smsCode = "";
 							let contact = "";
 							switch(type){
 								case "participants":
-									smsType = "SMS_133967493";
+									smsCode = participantsSMSCode;
 									switch(class_){
 										case "17":
 											contact = "张泽惠父亲 13632554826";
@@ -80,10 +82,10 @@ router.post('/:type', function(req, res, next) {
 									};
 									break;
 								case "hosts":
-									smsType = "SMS_133977436";
+									smsCode = hostsSMSCode;
 									break;
 								case "shows":
-									smsType = "SMS_133977433";
+									smsCode = showsSMSCode;
 									contactName = request.meta.master;
 									break;
 							}
@@ -97,10 +99,13 @@ router.post('/:type', function(req, res, next) {
 
 							await smsClient.sendSMS({
 								PhoneNumbers: smsTel,
-								SignName: 'SMSPROM2018',
-								TemplateCode: smsType,
+								SignName: smsSignature,
+								TemplateCode: smsCode,
 								TemplateParam: JSON.stringify(TemplateParam)
 							});
+
+							// Insert documents
+							cursor = await db.collection(type).insertMany(request.participants);
 
 							// TODO Return Object
 							res.status(201).json({errcode: 0, errmsg: "", fee: fee, uuid: uuid, class: class_, contact: contact});
@@ -191,7 +196,7 @@ function PromHosts(name, gender, group, uuid, tel, submitTime, class_){
 function PromShowPerformers(name, gender, group, uuid, tel, submitTime,  showtype, showtime, master, email, note){
     PromPeople.call(this, name, gender, group, uuid, tel, submitTime);
 	this.showtype = typeof showtype == "string" ? showtype : "";
-	this.showtime = typeof showtime == "number" ? showtime : 0;
+	this.showtime = typeof showtime == "string" ? showtime : "";
 	this.master = master == "yes" ? true : false;
 	this.email = typeof email == "string" ? email : "";
 	this.note = typeof note == "string" ? note : "";

@@ -25,6 +25,10 @@ textarea,
     color: white !important;
 }
 
+.field.error .item {
+    color: #9f3a38 !important;
+}
+
 form.ui.modal.tiny.form .field.error input {
     color: black !important;
 }
