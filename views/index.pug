@@ -207,9 +207,9 @@ block content
 					#participants.ui.registration.middle.button(style='color: white !important;') 舞会报名
 					#hosts.ui.registration.button(style='color: white !important;') 主持报名
 				.ui.horizontal.divider
-					a#slideIn
+					a#slideIn(href="#bulletins")
 						i.chevron.down.icon.inverted.grey
-		.ui.center.aligned.bulletin.ten.container.grid
+		.ui.center.aligned.bulletin.ten.container.grid(id="bulletins")
 			.row
 			- for (var i = 0; i < bulletins.length; i++)
 				.row.twelve.wide.tablet.fourteen.wide.phone.ten.wide.computer.column

@@ -98,12 +98,12 @@ router.post('/:type', function(req, res, next) {
 								fee: fee
 							}
 
-							/*await smsClient.sendSMS({
+							await smsClient.sendSMS({
 								PhoneNumbers: smsTel,
 								SignName: smsSignature,
 								TemplateCode: smsCode,
 								TemplateParam: JSON.stringify(TemplateParam)
-							});*/
+							});
 
 							// Insert documents
 							cursor = await db.collection(type).insertMany(request.participants);
