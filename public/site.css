@@ -110,7 +110,6 @@ body {
     background-color: #151340;
     border: 2px solid transparent;
     border-radius: 1.5rem;
-    padding: 10px;
     background-clip: padding-box;
 }
 
@@ -129,7 +128,7 @@ body {
 .ui.modal.form > .close {
     top: 1.0535rem;
     right: 1rem;
-    color: rgba(0, 0, 0, .87);
+    /*color: rgba(0, 0, 0, .87);*/
 }
 
 @media screen and (max-width: 600px) {
