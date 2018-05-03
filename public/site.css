@@ -4,7 +4,8 @@
 }
 
 form.ui.modal.tiny.form {
-    background: #0A0536/* radial-gradient(circle, #0A0536, #08001E)*/
+    background: #0A0536;/* radial-gradient(circle, #0A0536, #08001E)*/
+    position: absolute !important;
 }
 
 form.ui.modal.tiny.form .item {
