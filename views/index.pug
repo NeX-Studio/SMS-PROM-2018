@@ -12,7 +12,7 @@ block content
 					input(type='text', name='participants[][name]', placeholder='报名者姓名' data-validate='name')
 				.field
 					label 报名者性别
-					.ui.selection.dropdown
+					.ui.selection.search.dropdown
 						input(type='hidden', name='participants[][gender]', value='male' data-validate='gender')
 						i.dropdown.icon
 						.default.text 报名者性别
@@ -22,7 +22,7 @@ block content
 							.item(data-value='other') 其他
 				.field
 					label 是否负责人
-					.ui.selection.dropdown
+					.ui.selection.search.dropdown
 						input.decision(type='hidden', name='participants[][master]', value='no', data-true='yes')
 						i.dropdown.icon
 						.default.text 是否负责人
@@ -46,7 +46,7 @@ block content
 					input(type='text', name='participants[][name]', placeholder='报名者姓名', data-validate='name')
 				.field
 					label 报名者性别
-					.ui.selection.dropdown
+					.ui.selection.search.dropdown
 						input(type='hidden', name='participants[][gender]', value='male', data-validate='gender')
 						i.dropdown.icon
 						.default.text 报名者性别
@@ -59,7 +59,7 @@ block content
 					input(type='tel', name='participants[][tel]', placeholder='报名者电话', data-validate='tel')
 				.field
 					label 报名者类别
-					.ui.selection.dropdown
+					.ui.selection.search.dropdown
 						input.decision(type='hidden', name='participants[][type]', data-validate='type', value='', data-true='student partner')
 						i.dropdown.icon
 						.default.text 报名者类别
@@ -71,7 +71,7 @@ block content
 				.field.hidden
 					.field
 						label 学生班级
-						.ui.selection.dropdown
+						.ui.selection.search.dropdown
 							input(type='hidden', name='participants[][class]', value='', data-validate='class')
 							i.dropdown.icon
 							.default.text 学生班级
@@ -94,7 +94,7 @@ block content
 					input(type='text', name='participants[][name]', placeholder='报名者姓名', data-validate='name')
 				.field
 					label 申请人性别
-					.ui.selection.dropdown
+					.ui.selection.search.dropdown
 						input(type='hidden', name='participants[][gender]', value='male', data-validate='gender')
 						i.dropdown.icon
 						.default.text 申请人性别
@@ -107,7 +107,7 @@ block content
 					input(type='tel', name='participants[][tel]', placeholder='申请人电话', data-validate='tel')
 				.field
 					label 申请人班级
-					.ui.selection.dropdown
+					.ui.selection.search.dropdown
 						input(type='hidden', name='participants[][class]', value='17', data-validate='class')
 						i.dropdown.icon
 						.default.text 申请人班级
