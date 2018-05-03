@@ -297,3 +297,12 @@ $(".ui.form").form({
         showtype: "empty"
     }
 });
+
+$('.ui.sticky')
+  .sticky({
+    pushing: true,
+    offset       : 50,
+    bottomOffset : 50,
+    observeChanges: true
+  })
+;

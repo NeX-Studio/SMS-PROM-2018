@@ -134,21 +134,6 @@ function sterilizeData(val){
 	}
 }
 
-/*
-function sterilizeData(val){
-	return {
-		"name": typeof val.name == "string" ? val.name : "",
-		"gender": typeof val.gender == "string" ? val.gender : "",
-		"type": typeof val.type == "string" ? val.type : "",
-		"group": typeof this.group == "string" ? this.group : "",
-		"uuid": typeof this.uuid == "string" ? this.uuid : "",
-		"tel": typeof val.tel == "string" ? val.tel : "",
-		"avoidance": typeof this.avoidance == "string" ? this.avoidance : "",
-		"class": typeof val.class == "string" ? val.class : ""
-	}
-}
-*/
-
 function getFee(arr){
 	let fee = 0;
 	for(let i = 0; i < arr.length; i++){
@@ -157,7 +142,7 @@ function getFee(arr){
 				fee += 350;
 				break;
 			case "child":
-				fee += 200;
+				fee += 150;
 				break;
 			case "partner":
 				if(arr[i].class == "")
