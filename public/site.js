@@ -10,20 +10,15 @@ $.fn.api.settings.successTest = function(response) {
 }
 
 // Form Popup
-$(".form.ui.tiny.modal").each(function(){
-    $(this)
-        .modal('setting', 'transition', "vertical flip")
-        .modal('setting', 'duration', 600)
-        .modal("setting", "blurring", true)
-        .modal("setting", "close", "")
-        .modal("attach events", ".registration.button#"+$(this).attr("id"), "show")
-        .modal({
-            selector    : {
-              close    : '.close',
-              approve  : '.actions .positive, .actions .approve, .actions .ok',
-              deny     : '.actions .negative, .actions .deny, .actions .cancel'
-            }
-        })
+$(".ui.registration.button").click(function(){
+    let id = $(this).attr("id");
+    $(".registration.form").transition("hide");
+    $(".registration.form#" + id).transition("drop");
+});
+
+$(".close").click(function(){
+    let id = $(this).closest(".registration.form").attr("id");
+    $(".registration.form#" + id).transition("drop");
 });
 
 // Form Load

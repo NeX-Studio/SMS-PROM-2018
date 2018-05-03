@@ -117,85 +117,6 @@ block content
 							.item(data-value='19') 19班
 							.item(data-value='20') 20班
 							.item(data-value='') 非国体
-	form#shows.ui.modal.tiny.inverted.shows.registration.form
-		.header
-			img.ui.image.small.middle.aligned.left.floated(src='images/logo.png')
-			| | 节目报名
-		i.close.icon
-		.content.center.aligned.scrolling
-			.field
-				label 节目名称
-				input(type='text', name='meta[group]', data-validate='group', placeholder='节目名称')
-			.field
-				label 节目类型
-				input(type='text', name='meta[showtype]', data-validate='showtype', placeholder='节目类型')
-			.field
-				label 节目时间
-				.ui.right.labeled.input
-					input(type='number', name='meta[showtime]', data-validate='showtime', placeholder='节目时间')
-					.ui.basic.label
-						| min
-			.field
-				label 节目备注
-				.ui.input
-					textarea(rows='5', name='meta[note]', data-validate='note', placeholder='节目备注')
-			.field
-				label 报名人数
-				.ui.action.input
-					input#shows.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='报名人数')
-					a.ui.icon.button
-						i.check.icon
-			.ui.inverted.divider
-			.field
-				label 修改码
-				.ui.input
-					input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
-			button.ui.submit.button(type='submit') 报名
-			.ui.message(class="hidden")
-				.header
-				.lis
-	form#participants.ui.modal.tiny.participants.registration.inverted.form
-		.header
-			img.ui.image.small.middle.aligned.left.floated(src='images/logo.png')
-			| | 舞会报名
-		i.close.icon
-		.content.center.aligned.scrolling
-			.field
-				label 报名人数
-				.ui.action.input
-					input#participants.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='报名人数')
-					a.ui.icon.button
-						i.check.icon
-			.ui.inverted.divider
-			.field
-				label 修改码
-				.ui.input
-					input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
-			button.ui.submit.button(type='submit') 报名
-			.ui.message(class="hidden")
-				.header
-				.list
-	form#hosts.ui.modal.inverted.tiny.registration.hosts.form
-		.header
-			img.ui.image.small.middle.aligned.left.floated(src='images/logo.png')
-			| | 主持报名
-		i.close.icon
-		.content.center.aligned.scrolling
-			.field
-				label 申请人数
-				.ui.action.input
-					input#hosts.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='申请人数')
-					a.ui.icon.button
-						i.check.icon
-			.ui.inverted.divider
-			.field
-				label 修改码
-				.ui.input
-					input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
-			button.ui.submit.button(type='submit') 报名         
-			.ui.message(class="hidden")
-				.header
-				.list
 	// Page Contents
 	.pusher
 		.ui.center.aligned.inverted.poster.segment
@@ -206,6 +127,85 @@ block content
 					#shows.ui.registration.button(style='color: white !important;') 节目报名
 					#participants.ui.registration.middle.button(style='color: white !important;') 舞会报名
 					#hosts.ui.registration.button(style='color: white !important;') 主持报名
+				form#shows.ui.modal.tiny.inverted.shows.registration.form
+					.header
+						img.ui.image.small.middle.aligned.left.floated(src='images/logo.png')
+						| | 节目报名
+					i.close.icon
+					.content.center.aligned
+						.field
+							label 节目名称
+							input(type='text', name='meta[group]', data-validate='group', placeholder='节目名称')
+						.field
+							label 节目类型
+							input(type='text', name='meta[showtype]', data-validate='showtype', placeholder='节目类型')
+						.field
+							label 节目时间
+							.ui.right.labeled.input
+								input(type='number', name='meta[showtime]', data-validate='showtime', placeholder='节目时间')
+								.ui.basic.label
+									| min
+						.field
+							label 节目备注
+							.ui.input
+								textarea(rows='5', name='meta[note]', data-validate='note', placeholder='节目备注')
+						.field
+							label 报名人数
+							.ui.action.input
+								input#shows.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='报名人数')
+								a.ui.icon.button
+									i.check.icon
+						.ui.inverted.divider
+						.field
+							label 修改码
+							.ui.input
+								input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
+						button.ui.submit.button(type='submit') 报名
+						.ui.message(class="hidden")
+							.header
+							.lis
+				form#participants.ui.modal.tiny.participants.registration.inverted.form
+					.header
+						img.ui.image.small.middle.aligned.left.floated(src='images/logo.png')
+						| | 舞会报名
+					i.close.icon
+					.content.center.aligned
+						.field
+							label 报名人数
+							.ui.action.input
+								input#participants.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='报名人数')
+								a.ui.icon.button
+									i.check.icon
+						.ui.inverted.divider
+						.field
+							label 修改码
+							.ui.input
+								input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
+						button.ui.submit.button(type='submit') 报名
+						.ui.message(class="hidden")
+							.header
+							.list
+				form#hosts.ui.modal.inverted.tiny.registration.hosts.form
+					.header
+						img.ui.image.small.middle.aligned.left.floated(src='images/logo.png')
+						| | 主持报名
+					i.close.icon
+					.content.center.aligned
+						.field
+							label 申请人数
+							.ui.action.input
+								input#hosts.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='申请人数')
+								a.ui.icon.button
+									i.check.icon
+						.ui.inverted.divider
+						.field
+							label 修改码
+							.ui.input
+								input(type='text', name='meta[uuid]', data-validate='uuid', placeholder='没有请留空')
+						button.ui.submit.button(type='submit') 报名         
+						.ui.message(class="hidden")
+							.header
+							.list
 				.ui.horizontal.divider
 					a#slideIn(href="#bulletins")
 						i.chevron.down.icon.inverted.grey
