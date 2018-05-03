@@ -8,6 +8,10 @@ form.ui.modal.tiny.form {
     position: absolute !important;
 }
 
+.ui.page.dimmer {
+    position: absolute !important;
+}
+
 form.ui.modal.tiny.form .item {
     background: #0A0536/*radial-gradient(circle, #0A0536, #08001E)*/
 }
