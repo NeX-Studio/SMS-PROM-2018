@@ -13,7 +13,7 @@ $.fn.api.settings.successTest = function(response) {
 $(".ui.registration.button").click(function(){
     let id = $(this).attr("id");
     $(".registration.form").transition("hide");
-    $(".registration.form#" + id).transition("drop");
+$(".registration.form#" + id).transition("drop");
 });
 
 $(".close").click(function(){
@@ -237,7 +237,7 @@ $("input.amount").each(function(){
                 msg.addClass("success");
                 msg.find(".header").text("报名完成");
                 msg.find(".list").empty();
-                msg.find(".list").append("<li>我们已经收到了您的报名信息，请于2018年5月10日24:00前联系家委会负责人支付报名费用</li>");
+                msg.find(".list").append("<li>我们已经收到了您的报名信息，请于2018年5月13日24:00前联系家委会负责人支付报名费用</li>");
                 msg.find(".list").append("<li>总参与人数: " + response.amount + "</li>");
                 msg.find(".list").append("<li>需支付金额: " + response.fee + "</li>");
                 msg.find(".list").append("<li>收费负责人: "+ contact + "</li>");
