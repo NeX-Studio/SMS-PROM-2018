@@ -97,6 +97,7 @@ $("input.amount").each(function(){
                 msg.find(".list").empty();
                 msg.find(".list").append("<li>我们已收到您的主持报名申请，请耐心等候，我们的工作人员将尽快与您取得联系</li>");
                 msg.find(".list").append("<li>修改码: " + response.uuid + "</li>");
+                msg.find(".list").append("<li>注意: 主持报名和节目报名是独立的</li>");
                 msg.transition('vertical flip in');
             },
             onFailure: function(response, element) {
@@ -167,6 +168,7 @@ $("input.amount").each(function(){
                 msg.find(".list").empty();
                 msg.find(".list").append("<li>我们已收到您的节目报名申请，请耐心等候，我们的工作人员将尽快与您取得联系</li>");
                 msg.find(".list").append("<li>修改码: " + response.uuid + "</li>");
+                msg.find(".list").append("<li>注意: 舞会报名和节目报名是独立的</li>");
                 msg.transition('vertical flip in');
             },
             onFailure: function(response, element) {

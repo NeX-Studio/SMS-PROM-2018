@@ -8,14 +8,14 @@ block content
 				// Create New inputs here
 				.ui.inverted.divider
 				.field
-					label 报名者姓名
-					input(type='text', name='participants[][name]', placeholder='报名者姓名' data-validate='name')
+					label 参与者姓名
+					input(type='text', name='participants[][name]', placeholder='参与者姓名' data-validate='name')
 				.field
-					label 报名者性别
+					label 参与者性别
 					.ui.selection.search.dropdown
 						input(type='hidden', name='participants[][gender]', value='male' data-validate='gender')
 						i.dropdown.icon
-						.default.text 报名者性别
+						.default.text 参与者性别
 						.menu
 							.item(data-value='male') 男
 							.item(data-value='female') 女
@@ -42,27 +42,27 @@ block content
 				// Create New inputs here
 				.ui.inverted.divider
 				.field
-					label 报名者姓名
-					input(type='text', name='participants[][name]', placeholder='报名者姓名', data-validate='name')
+					label 参与者姓名
+					input(type='text', name='participants[][name]', placeholder='参与者姓名', data-validate='name')
 				.field
-					label 报名者性别
+					label 参与者性别
 					.ui.selection.search.dropdown
 						input(type='hidden', name='participants[][gender]', value='male', data-validate='gender')
 						i.dropdown.icon
-						.default.text 报名者性别
+						.default.text 参与者性别
 						.menu
 							.item(data-value='male') 男
 							.item(data-value='female') 女
 							.item(data-value='other') 其他
 				.field
-					label 报名者电话
-					input(type='tel', name='participants[][tel]', placeholder='报名者电话', data-validate='tel')
+					label 参与者电话
+					input(type='tel', name='participants[][tel]', placeholder='参与者电话', data-validate='tel')
 				.field
-					label 报名者类别
+					label 参与者类别
 					.ui.selection.search.dropdown
 						input.decision(type='hidden', name='participants[][type]', data-validate='type', value='', data-true='student partner')
 						i.dropdown.icon
-						.default.text 报名者类别
+						.default.text 参与者类别
 						.menu
 							.item(data-value='student') 学生
 							.item(data-value='partner') 舞伴
@@ -82,8 +82,8 @@ block content
 								.item(data-value='20') 20班
 								.item(data-value='') 非国体
 				.field
-					label 报名者忌口
-					input(type='text', name='participants[][avoidance]', data-validate='avoidance', placeholder='报名者忌口')
+					label 参与者忌口
+					input(type='text', name='participants[][avoidance]', data-validate='avoidance', placeholder='参与者忌口')
 	.hidden.hosts.registration.form
 		.field
 			.field
@@ -91,7 +91,7 @@ block content
 				.ui.inverted.divider
 				.field
 					label 申请人姓名
-					input(type='text', name='participants[][name]', placeholder='报名者姓名', data-validate='name')
+					input(type='text', name='participants[][name]', placeholder='申请人姓名', data-validate='name')
 				.field
 					label 申请人性别
 					.ui.selection.search.dropdown
@@ -148,11 +148,11 @@ block content
 						.field
 							label 节目备注
 							.ui.input
-								textarea(rows='5', name='meta[note]', data-validate='note', placeholder='节目备注')
+								textarea(rows='5', name='meta[note]', data-validate='note', placeholder='设备需求或特殊要求')
 						.field
-							label 报名人数
+							label 参与人数
 							.ui.action.input
-								input#shows.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='报名人数')
+								input#shows.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='参与人数')
 								a.ui.icon.button
 									i.check.icon
 						.ui.inverted.divider
@@ -172,9 +172,9 @@ block content
 					i.close.icon
 					.content.center.aligned
 						.field
-							label 报名人数
+							label 参与人数
 							.ui.action.input
-								input#participants.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='报名人数')
+								input#participants.amount(type='number', name='meta[amount]', data-validate='amount', placeholder='参与人数')
 								a.ui.icon.button
 									i.check.icon
 						.ui.inverted.divider
