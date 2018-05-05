@@ -130,7 +130,7 @@ function sterilizeData(val){
 		case "hosts": 
 			return new PromHosts(val.name, val.gender, this.group, this.uuid, val.tel, this.submitTime, val.class);
 		case "shows":
-			return new PromShowPerformers(val.name, val.gender, this.group, this.uuid, val.tel, this.submitTime, this.showtype, this.showtime, val.master, val.email, this.note);
+			return new PromShowPerformers(val.name, val.gender, this.group, this.uuid, val.tel, this.submitTime, this.showtype, this.showtime, val.master, val.email, this.note, this.description);
 	}
 }
 
@@ -179,13 +179,14 @@ function PromHosts(name, gender, group, uuid, tel, submitTime, class_){
 	this.class = class_;
 }
 
-function PromShowPerformers(name, gender, group, uuid, tel, submitTime,  showtype, showtime, master, email, note){
+function PromShowPerformers(name, gender, group, uuid, tel, submitTime,  showtype, showtime, master, email, note, description){
     PromPeople.call(this, name, gender, group, uuid, tel, submitTime);
 	this.showtype = typeof showtype == "string" ? showtype : "";
 	this.showtime = typeof showtime == "string" ? showtime : "";
 	this.master = master == "yes" ? true : false;
 	this.email = typeof email == "string" ? email : "";
 	this.note = typeof note == "string" ? note : "";
+	this.description = typeof description == "string" ? description : "";
 }
 
 module.exports = router;

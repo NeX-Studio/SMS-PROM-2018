@@ -136,6 +136,10 @@ block content
 								.ui.basic.label
 									| min
 						.field
+							label 节目描述
+							.ui.input
+								textarea(rows='5', name='meta[description]', data-validate='description', placeholder='节目内容描述')
+						.field
 							label 节目备注
 							.ui.input
 								textarea(rows='5', name='meta[note]', data-validate='note', placeholder='设备需求或特殊要求')
@@ -154,7 +158,7 @@ block content
 						button.ui.close.button 关闭
 						.ui.message(class="hidden")
 							.header
-							.lis
+							.list
 				form#participants.ui.modal.tiny.participants.registration.inverted.form
 					.header
 						img.ui.image.small.middle.aligned.left.floated(src='images/logo.png')
