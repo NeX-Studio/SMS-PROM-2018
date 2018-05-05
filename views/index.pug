@@ -11,16 +11,6 @@ block content
 					label 参与者姓名
 					input(type='text', name='participants[][name]', placeholder='参与者姓名' data-validate='name')
 				.field
-					label 参与者性别
-					.ui.selection.search.dropdown
-						input(type='hidden', name='participants[][gender]', value='male' data-validate='gender')
-						i.dropdown.icon
-						.default.text 参与者性别
-						.menu
-							.item(data-value='male') 男
-							.item(data-value='female') 女
-							.item(data-value='other') 其他
-				.field
 					label 是否负责人
 					.ui.selection.search.dropdown
 						input.decision(type='hidden', name='participants[][master]', value='no', data-true='yes')
@@ -65,7 +55,7 @@ block content
 						.default.text 参与者类别
 						.menu
 							.item(data-value='student') 学生
-							.item(data-value='partner') 舞伴
+							.item(data-value='partner') 舞伴 (国体学生需单独报名|非国体舞伴费用会计入您的总费用)
 							.item(data-value='parent') 家长及12岁以上大童
 							.item(data-value='child') 12岁以下小童
 				.field.hidden
@@ -168,7 +158,7 @@ block content
 				form#participants.ui.modal.tiny.participants.registration.inverted.form
 					.header
 						img.ui.image.small.middle.aligned.left.floated(src='images/logo.png')
-						| | 舞会报名
+						| | 舞会报名 (以家庭为单位)
 					i.close.icon
 					.content.center.aligned
 						.field

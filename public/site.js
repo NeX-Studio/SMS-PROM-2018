@@ -42,7 +42,7 @@ $("input.amount").each(function(){
                 $(this).closest("div.field").nextAll("div.field:first").transition('drop out');
             }
 
-        })
+        });
 
         $('.ui.dropdown')
           .dropdown()
