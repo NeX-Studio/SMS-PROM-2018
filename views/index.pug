@@ -212,7 +212,7 @@ block content
 				.row.twelve.wide.tablet.fourteen.wide.phone.ten.wide.computer.column
 					a(href=`${bulletins[i].link}`).ui.raised.inverted.left.aligned.padded.segment
 						h2.ui.header= bulletins[i].title
-						p= bulletins[i].text
+						p !{bulletins[i].text}
 			.row
 		.ui.inverted.vertical.footer.segment
 			.ui.center.aligned.container
