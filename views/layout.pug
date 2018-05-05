@@ -5,5 +5,12 @@ html
 		link(rel='stylesheet', type='text/css', href='semantic.min.css')
 		link(rel='stylesheet', type='text/css', href='site.css')
 		title SMS PROM 2018
+		// Global site tag (gtag.js) - Google Analytics
+		script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-105612146-5')
+		script.
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-105612146-5');
 	body
 		block content
